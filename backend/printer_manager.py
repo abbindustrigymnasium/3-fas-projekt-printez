@@ -1,4 +1,4 @@
-from bambu_connect import BambuClient
+from bambu_connect import *
 from dotenv import load_dotenv
 import os
 
