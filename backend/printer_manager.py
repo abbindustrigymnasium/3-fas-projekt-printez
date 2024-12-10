@@ -28,11 +28,13 @@ class printer_manager():
             print(f"name: {name}\nip: {ip}\nserial: {serial}\naccess_code: {access_code}")
             self.printers[name] = Printer(ip, access_code, serial)
             self.printers[name].connect()
+            
 
          
     def print_states(self, states_to_print:list[str] = None):
         """
         Function to get the states of specified printers.
+
         Params:
             states_to_print: list[str] - The names of all the printers to get states from, if not specified it will print states for all printers
         Return:
@@ -52,9 +54,11 @@ class printer_manager():
     def upload_print(self, printer_name:str, file_path:str):
         """
         Function to upload file to printer (.gcode or .3mf)
+
         params:
             printer_name: str - Name of the printer to upload to, same as specified in .env
             file_path: str - Local path to file
+
         Return:
             str:
                 Success:
@@ -72,6 +76,7 @@ class printer_manager():
             file_name = file_path.split("/")[-1]
             return self.printers[printer_name].upload_file(file, file_name)
 
+
     def start_print(self, printer_name:str, file_name:str):
         """
         Function to start a print on a printer
@@ -83,13 +88,18 @@ class printer_manager():
             bool:
                 Whether successful
 
-        Possible problems: "plate_number" prameter is always set to 1, I have no idea what it is or if it should be changed depending on the print
-        THIS FUNCTION HAS YET TO BE TESTED!!!
+        This function doesnt work, problem is believed to be that cloud connection is needed.
         """
-        return self.printers[printer_name].start_print(file_name, 1)
+        return self.printers[printer_name].start_print(file_name, 0)
 
     def get_printer_info(self, printer_name):
         pass
+
+    def disconnect_printers(self, printer_names:list[str] = None):
+        if printer_names == None:
+            printer_names = list(self.printers.keys())
+        for printer_name in printer_names:
+            self.printers[printer_name].disconnect()
 
 
 if __name__ == "__main__":
@@ -98,12 +108,48 @@ if __name__ == "__main__":
     time.sleep(2)
 
     # # Get the printer status
-    states = p_man.print_states()
+    # states = p_man.print_states()
     # print(list(p_man.printers.keys())[0])
-    # printer_names = list(p_man.printers.keys())
+    printer_names = list(p_man.printers.keys())
     # with open("prints/fan2.3mf", "rb") as file:
     #     print(file.read())
-    # p_man.upload_print(printer_names[0], "prints/fan2.3mf")
+    # print("Uploading")
+    # p_man.upload_print(printer_names[0], "prints/fan4.gcode")
+    # print("Finished upload")
+    # time.sleep(2)
+    printer_1 = list(p_man.printers.keys())[0]
+    # print(p_man.printers[printer_1])
+    # print(p_man.printers[printer_1].PrintStatus.PRINTING)
 
-    print(f'Printer status: {states}')
+    # print(p_man.printers[printer_1].get_file_name())
+    # print("Trying to start print")
+    # p_man.printers[printer_1].start_print("fan3.gcode.3mf", 1)
+    # print("Command sent, hopefully")
+
+    p_man.printers[printer_1].turn_light_on()
+    time.sleep(3)
+    frame = p_man.printers[printer_1].get_camera_frame()
+    with open("tests/image_frame.html", "w") as frame_file:
+        frame_txt = f"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Base64 Image</title>
+</head>
+<body>
+    <h1>Displaying Base64 Image</h1>
+    <img src="data:image/png;base64,{frame}" alt="Base64 Image" />
+</body>
+</html>
+"""
+        frame_file.write(frame_txt)
+
+
+    # print(f'Printer status: {states}')
+    # print("Starting print")
+    # print(p_man.start_print(list(p_man.printers.keys())[0], "fan4.gcode"))
+    # print("here")
+    # p_man.disconnect_printers()
 

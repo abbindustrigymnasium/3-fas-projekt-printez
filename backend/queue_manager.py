@@ -26,15 +26,18 @@ class queue_manager():
     def add_new_print(self, owner:str, file_path:str, estim_time:int, time_waited):
         """
         Function to add new print to prints.
+        
         Params: 
-            owner (string) - owner of print,
-            file_path (string) - path to print file,
-            estim_time (int) - estimate for how long the print will take in seconds
+            owner: str - owner of print,
+            file_path: str - path to print file,
+            estim_time: int - estimate for how long the print will take in seconds
 
         Return:
-            uuid - an id to tie to user, for accessing the print
-            and
-            bool - whether print was added
+            uuid:
+                an id to tie to user, for accessing the print
+    
+            bool:
+                whether print was added
         """
         self.update_print_times()
         wait_to_end_of_day = True if estim_time > self.max_time_during_day else False
@@ -55,12 +58,14 @@ class queue_manager():
         """
         Remove print from prints by the id.
         Params: 
-            print_to_remove (string) - uuid of the print to remove
+            print_to_remove: str - uuid of the print to remove
 
         Return: 
-            bool - whether removing was successful
-            and
-            string - reason for failure (if known), empty string on success
+            bool:
+                whether removing was successful
+            
+            str:
+                reason for failure (if known), empty string on success
         """ 
         try:
             self.prints.pop(print_to_remove)
@@ -76,6 +81,12 @@ class queue_manager():
     def update_print_times(self):
         """
         Update the times for all prints in the list, based on how much time has passed since the last update.
+
+        params:
+            None
+
+        return:
+            None
         """
         now_time = int(datetime.now().timestamp())
         for print_id in self.prints:
@@ -87,8 +98,15 @@ class queue_manager():
         """
         Function to get the next print to print based on the expected time to print and for how long it has been waiting.
 
-        Return: 
-            uuid/string - uuid of print to print, None if prints is empty 
+        params:
+            None
+
+        return: 
+            if queue_manager.prints is empty:
+                None
+
+            else:
+                uuid/string - uuid of print to print 
         """
         self.update_print_times()
         current_shortest_print = [None, float("inf")]
