@@ -1,0 +1,197 @@
+body {
+    margin-top: 70px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: rgb(79, 255, 88);
+    font-family: Arial, sans-serif;
+}
+.animation-container {
+    text-align: center;
+}
+
+/* Apply the animation to the element */
+.animated-element {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    animation: slideIn 1s ease-out forwards; /* Duration: 1s */
+}
+.container {
+    display: flex; /* Flexbox container for side-by-side alignment */
+    width: 90%; /* Adjust as needed for layout */
+    justify-content: center;
+    padding-top: 0;
+}
+.Dowbox {
+    flex: 1; /* Allow the box to take up equal width */
+    max-width: 40%; /* Limit the maximum width */
+    height: 492px;
+    background-color: #F0F0F0;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    border: 4px dashed #A3CEFF; 
+    text-align: center; 
+    font-size: 16px;
+    color: gray;
+}
+.file-box {
+    display: flex; 
+    align-items: center;
+    justify-content: start; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    border: 2px solid #6060fc; 
+    padding: 5px;
+    width: 90%; 
+    height: 60px;
+    border-radius: 20px;
+    position: relative; /* Allows elements to follow normal flow */
+    margin-top: 10px; /* Add spacing between stacked elements */
+}
+.file-icon {
+    margin-right: 10px; /* Add space between the icon and file name */
+    margin-left: 20px;
+    font-size: 40px;
+}
+.file-name {
+    flex-grow: 1; /* Allow the file name to expand, pushing the button to the right */
+    text-overflow: ellipsis; /* Truncate long file names with "..." */
+    overflow: hidden; /* Hide overflow if text is too long */
+}
+.Qfile-name {
+    flex-grow: 1; /* Allow the file name to expand, pushing the button to the right */
+    text-overflow: ellipsis; /* Truncate long file names with "..." */
+    overflow: hidden; /* Hide overflow if text is too long */
+}
+.LDowbox {
+    flex: 1; /* Allow the box to take up equal width */
+    max-width: 40%; /* Limit the maximum width */
+    height: 500px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#queueList{
+    width: 25%;
+    height: 400px;
+    background-color: #ffffff;
+    border-radius: 30px;
+    margin-top: 1050px;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+}
+#In-Queue{
+    min-width: 25%;
+    max-width: 50%;
+    height: 25px;
+    border-radius: 30px;
+    margin-top: 600px;
+    position: absolute;
+    font-size: large;
+    font: bold;
+    background-color: #ffffff;
+    text-align: center;
+}
+#browseButton {
+    margin-top: 20px; /* Add spacing below the text or drop zone */
+    padding: 10px 20px; /* Add padding for a nicer button look */
+    font-size: 16px; /* Font size for the button text */
+    cursor: pointer; /* Pointer cursor on hover */
+    border: none;
+    background-color: #A3CEFF; /* Green button background */
+    color: white; /* White text */
+    border-radius: 5px; /* Rounded corners */
+}
+#browseButton:hover {
+    background-color: #9ed4dc; /* Darker green on hover */
+}
+#fileInput {
+    display: none;
+}
+/* Countdown timer styles */
+#QueueTime {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    color: black;
+    background-color: white;
+    border-radius: 20px;
+    width: 250px;
+    height: 35px;
+    justify-content: center;
+    text-align: center;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timer-container {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timer-circle {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 8px solid #3498db;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.time {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+}
+
+.progress-bar {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(#3498db 0deg, #3498db 0deg, transparent 0deg);
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    transition: background 1s linear;
+}
+
+#addToQueueButton {
+    position: absolute;
+    margin-top: 250px;
+    bottom: 75px;
+    padding: 10px 2.5%;
+    background-color: #d3d3d3;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 30px;
+}
+#fileList, #queueList {
+    margin-bottom: 20px;
+}
+
+
