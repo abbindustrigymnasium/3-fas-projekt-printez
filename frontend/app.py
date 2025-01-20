@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import random
 import os
 import shutil
- 
+
 app = Flask(__name__)
  
 # Configuration
@@ -59,7 +59,26 @@ def upload_file():
  
     return jsonify({"error": "Invalid file type"}), 400
  
- 
+@app.route("/cancel", methods=["POST"])
+def cancel_print():
+    """Handle cancellation of a print job."""
+    try:
+        data = request.get_json()
+        print_id = data.get("printId")
+
+        if not print_id:
+            return jsonify({"error": "Print ID is required"}), 400
+
+        # Log or handle the cancellation action
+        print(f"Cancellation received for Print ID: {print_id}")
+
+        # Optionally, update the state of the print job in your backend logic or database
+
+        return jsonify({"status": f"Print ID {print_id} canceled successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
 @app.errorhandler(413)
 def request_entity_too_large(error):
     """Handle large file uploads."""
@@ -107,7 +126,7 @@ def printer_status():
 def get_status():
     """Send dummy status and a randomly generated countdown time."""
     try:
-        random_minutes = random.randint(1, 1)  # Random minutes between 1 and 120
+        random_minutes = random.randint(5, 120)  # Random minutes between 1 and 120
         generated_time = datetime.utcnow() + timedelta(minutes=random_minutes)
 
         current_time = datetime.utcnow()
@@ -123,6 +142,17 @@ def get_status():
 
     except Exception as e:
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+
+@app.route("/takeout", methods=["POST"])
+def takeout():
+    data = request.get_json()
+    print_id = data.get("printId")
+    if not print_id:
+        return jsonify({"error": "Print ID is required"}), 400
+    
+    # Log or perform an action for the takeout request
+    print(f"Takeout action confirmed for Print ID: {print_id}")
+    return jsonify({"status": "Takeout action received successfully"}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)

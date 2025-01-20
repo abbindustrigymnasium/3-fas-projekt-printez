@@ -86,6 +86,7 @@ function removeFile(index) {
 
 // Add files to the queue and upload
 async function addToQueue() {
+    
     for (let i = 0; i < yourfiles.length; i++) {
         const file = yourfiles[i];
 

@@ -140,13 +140,14 @@ body {
 margin-left: 50%;
 color: white;
 }
+
 #QueueTime {
     margin-left: 15%;
     margin-top: 20px;
-    font-size: 20vw;
+    font-size: 19vw;
     height: 35px;
     color: white;
-    font-weight: 400;
+    font-weight: 350;
 }
 
 .timer-container {
@@ -193,9 +194,9 @@ color: white;
     margin-left: 11.5%;
     height: 200px;
     width: 80%;
-    background: url('https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwallpapercave.com%2Fwp%2FBMrmUGk.jpg&f=1&nofb=1&ipt=db42396eab7f346f3e25d8b8d6e27954c4db5aec01c57405b2a72b9e56e37b70&ipo=images') repeat-x;
-    background-size: 200%;
-    animation: scroll-printing 100s linear infinite;
+    background: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.hdwallpapers.in%2Fdownload%2Fstars_space_darkness_night_black_sky_background_hd_space-HD.jpg&f=1&nofb=1&ipt=3f8bb52e12dec213b631e00e1cfbaa153b0123f856f71b9fa18d92996a474db8&ipo=images') repeat-x;
+    background-size: 400%;
+    animation: scroll-printing 250s linear infinite;
     border: 1px solid white !important; /* Ensure border is not overridden */
     font-size: 25px;
     font-weight: 400;

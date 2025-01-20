@@ -61,12 +61,16 @@ function startCountdown(printId, totalSeconds, remainingSeconds) {
 }
 
 // Function to cancel countdown
+// Function to cancel countdown
 function cancelCountdown(printId) {
     const timerId = `timer-${printId}`;
     if (window[timerId]) {
         clearInterval(window[timerId]);
         console.log(`Print #${printId} countdown canceled`);
-        
+
+        // Notify the backend of the cancellation
+        sendCancelAction(printId);
+
         // Optionally, reset progress bar and timer display
         document.getElementById(`progress-bar-${printId}`).style.width = '0%';
         document.getElementById(`time-label-${printId}`).textContent = 'Canceled';
@@ -75,6 +79,29 @@ function cancelCountdown(printId) {
         document.getElementById(`print-${printId}`).remove();
     }
 }
+
+// Function to send cancel action to Flask backend
+async function sendCancelAction(printId) {
+    try {
+        const response = await fetch('/cancel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ printId }),
+        });
+
+        if (!response.ok) {
+            const data = await response.json();
+            console.error('Failed to notify cancellation:', data.error);
+        } else {
+            console.log(`Cancellation confirmed for Print ID: ${printId}`);
+        }
+    } catch (error) {
+        console.error('Error sending cancellation action:', error);
+    }
+}
+
 
 // Function to create a takeout prompt box
 function createTakeoutPrompt(printId) {
