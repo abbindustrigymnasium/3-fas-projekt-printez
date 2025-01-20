@@ -167,3 +167,9 @@ cython_debug/
 prints/
 tests/
 rbc/
+bambu_api_cloud/
+access_code
+printer_files.json
+upload_test.py
+
+.vscode/
