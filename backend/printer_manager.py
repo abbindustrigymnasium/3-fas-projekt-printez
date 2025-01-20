@@ -215,7 +215,7 @@ class printer_manager():
         This function doesnt work, problem is believed to be that cloud connection is needed.
         """
         if filename.split(".")[-1] == "3mf":
-            return self.printers[printer_name].start_print(filename, 1, PlateType.TEXTURED_PLATE, False)
+            return self.printers[printer_name].print_3mf_file(filename, 1, PlateType.TEXTURED_PLATE, False)
         
 
 
