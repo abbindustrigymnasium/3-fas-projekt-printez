@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="./static/css/PrintEz.css">
+    <link rel="stylesheet" href="./static/css/about.css">
+    <link rel="stylesheet" href="./static/css/HämtaPrint.css">¨
+</head>
+<body   >
+    <div class="takeout-prompt"></div>
+    <h1 id="top">Queue</h1>
+    <h1 id="QueueTime">1h 20min</h1>
+
+    <div class="hover-area"></div>
+
+    <div class="sidebar">
+        <img id="sidebar-img"src="./static/js/PrintEz.png" alt="Sidebar Image" />
+        <ul>
+          <li><a href="#" id="option1">Option 1</a></li>
+          <li><a href="#" id="option2">Option 2</a></li>
+          <li><a href="#" id="option3">Option 3</a></li>
+          <li><a href="#" id="option4">Option 4</a></li>
+        </ul>
+      </div>
+
+    <div class="container">
+        <div class="Dowbox" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="fa-solid fa-cloud-arrow-down" style="font-size: 48px; color: gray;"></div>
+            <p style="color: gray;">Drop your file here or select one below.</p>
+            <button id="browseButton" onclick="triggerFileInput()">Browse</button>
+            <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)">
+            <h2 id="infoDowbox2">1:  Välj de G-code-filer du vill printa</h2>
+        </div>
+        <div class="LDowbox">
+            <p id="File"></p>
+            <div id="fileList"></div>   
+            <button id="addToQueueButton" onclick="addToQueue()">
+                Add to Queue
+            </button>
+            <h1 id="Uploaded-files">
+                Uploaded Files:
+            </h1>
+            <h2 id="infoDowbox">2:  Tryck på 'Add to Queue' för att lägga till printen i den virtuella kön</h2>
+        </div>
+        <div class="LDowbox">
+            <div id="In-Queue">Prints som köar:</div>
+            <div id="queueList"></div>
+            <h2 id="infoDowbox">3:  Här är dina prints som står i kö</h2>
+        </div>
+    </div> 
+    <h1 class="titleh3" id="TextDinPrint">Dina prints</h1>
+    <div id="print-area"></div>
+    <div id="printing-list"></div>
+
+
+    <!--About us-->
+    <h1 id="titleh1">About us</h1>
+    <h2 class="info">
+        fgbjhnkmjnhbgvfhbjnmk
+    </h2>
+    <h2 class="info">
+        fgbjhnkmjnhbgvfhbjnmk
+    </h2>
+    <h2 class="info2">
+        fgbjhnkmjnhbgvfhbjnmk
+    </h2>
+    <h2 class="info2">
+        fgbjhnkmjnhbgvfhbjnmk
+    </h2>
+    <h2 class="info2">
+        fgbjhnkmjnhbgvfhbjnmk
+    </h2>
+    <h2 class="info">
+        fgbjhnkmjnhbgvfhbjnmk
+    </h2>
+    <h2 class="info">
+        jkhbkikhbkiokhbkihkioknhkiknhkiknhknhnkinkinkin
+        kinkionkiokiokikonionionkinkininnkinnkinkionkin
+        kininnkninkjkhbkikhbkiokhbkihkioknhkiknhkiknhknhnkinkinkin
+        kinkionkiokiokikonionionkinkininnkinnkinkionkin
+        kininnknink
+    </h2>
+    <!--About us-->
+
+    <script src="./static/js/PrintEz.js"></script>
+    <script src="./static/js/upload.js"></script>
+    <script src="./static/js/HämtaPrint.js"></script>
+    <script src="./static/js/sidebar.js"></script>
+</body>
+</html>

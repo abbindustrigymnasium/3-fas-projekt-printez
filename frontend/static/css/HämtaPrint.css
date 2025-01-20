@@ -1,0 +1,111 @@
+body {
+  background-color: #1a1a1a;
+}
+.PrintBox{
+  color: aliceblue;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  min-height: 50px;
+
+}
+
+.titleh3{
+  text-align: center;
+  margin-left: 4%;
+  color: white;
+  margin-top: 150px;
+}
+
+#scroll-container {
+  height: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+  
+.takeout-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    z-index: 1000;
+    text-align: center;
+}
+
+.takeout-prompt button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.takeout-prompt button:hover {
+    background-color: #0056b3;
+}
+
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -10px; /* Sidebar always visible on the left */
+  width: 9% !important;
+  height: 100%;
+  background-color: #333;
+  color: white;
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #444;
+}
+
+.sidebar ul li:hover {
+  background-color: #575757;
+  cursor: pointer;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+/* Content area styles */
+.content {
+  margin-left: 250px; /* Leave space for the sidebar */
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+#sidebar-img{
+  width: 100%;
+}
+/* Responsive design: On small screens, the sidebar will still be visible */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    left: 0; /* Sidebar is always visible */
+    width: 250px; /* Sidebar width is fixed */
+  }
+
+  .content {
+    margin-left: 250px; /* Content still leaves space for sidebar */
+  }
+}
+
