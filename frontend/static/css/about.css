@@ -14,5 +14,12 @@
     text-align: right;
     color: white;
     margin-top: 20px;
-    
+
+}
+#bottom{
+    background-color: black;
+    color: rgb(136, 136, 136);
+    width: 93%;
+    margin-left: 7%;
+    height: 200px;
 }

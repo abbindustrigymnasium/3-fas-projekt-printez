@@ -86,9 +86,15 @@ function removeFile(index) {
 
 // Add files to the queue and upload
 async function addToQueue() {
-    
     for (let i = 0; i < yourfiles.length; i++) {
         const file = yourfiles[i];
+
+        // Check if the file is already in the queue, and remove it if present
+        const existingFileIndex = queueFiles.findIndex((queuedFile) => queuedFile.name === file.name);
+        if (existingFileIndex !== -1) {
+            // Remove the file from the queue before adding the new one
+            await removeQueueFile(existingFileIndex);
+        }
 
         const formData = new FormData();
         formData.append("file", file);
@@ -102,7 +108,7 @@ async function addToQueue() {
             const result = await response.json();
             if (response.ok) {
                 console.log(`File ${file.name} uploaded successfully.`);
-                queueFiles.push({ name: file.name });
+                queueFiles.push({ name: file.name });  // Add the new file to the queue
             } else {
                 alert(`Error uploading file ${file.name}: ${result.error}`);
             }
@@ -115,6 +121,7 @@ async function addToQueue() {
     updateFileList();
     updateQueueList();
 }
+
 
 // Update the queue list display
 function updateQueueList() {

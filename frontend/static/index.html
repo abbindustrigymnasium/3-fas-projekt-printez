@@ -31,7 +31,7 @@
             <p style="color: gray;">Drop your file here or select one below.</p>
             <button id="browseButton" onclick="triggerFileInput()">Browse</button>
             <input type="file" id="fileInput" style="display: none;" onchange="handleFileSelect(event)">
-            <h2 id="infoDowbox2">1:  Välj de G-code-filer du vill printa</h2>
+            <h2 id="infoDowbox2">1:  Välj de 3mf-filer du vill printa, inga g-code filer</h2>
         </div>
         <div class="LDowbox">
             <p id="File"></p>
@@ -47,46 +47,19 @@
         <div class="LDowbox">
             <div id="In-Queue">Prints som köar:</div>
             <div id="queueList"></div>
-            <h2 id="infoDowbox">3:  Här är dina prints som står i kö</h2>
+            <h2 id="infoDowbox3">3:  Här är dina prints som står i kö</h2>
         </div>
     </div> 
     <h1 class="titleh3" id="TextDinPrint">Dina prints</h1>
     <div id="print-area"></div>
     <div id="printing-list"></div>
 
-
-    <!--About us-->
-    <h1 id="titleh1">About us</h1>
-    <h2 class="info">
-        fgbjhnkmjnhbgvfhbjnmk
-    </h2>
-    <h2 class="info">
-        fgbjhnkmjnhbgvfhbjnmk
-    </h2>
-    <h2 class="info2">
-        fgbjhnkmjnhbgvfhbjnmk
-    </h2>
-    <h2 class="info2">
-        fgbjhnkmjnhbgvfhbjnmk
-    </h2>
-    <h2 class="info2">
-        fgbjhnkmjnhbgvfhbjnmk
-    </h2>
-    <h2 class="info">
-        fgbjhnkmjnhbgvfhbjnmk
-    </h2>
-    <h2 class="info">
-        jkhbkikhbkiokhbkihkioknhkiknhkiknhknhnkinkinkin
-        kinkionkiokiokikonionionkinkininnkinnkinkionkin
-        kininnkninkjkhbkikhbkiokhbkihkioknhkiknhkiknhknhnkinkinkin
-        kinkionkiokiokikonionionkinkininnkinnkinkionkin
-        kininnknink
-    </h2>
-    <!--About us-->
+    <div id="bottom"></div>
 
     <script src="./static/js/PrintEz.js"></script>
     <script src="./static/js/upload.js"></script>
     <script src="./static/js/HämtaPrint.js"></script>
     <script src="./static/js/sidebar.js"></script>
+    <script src="./static/js/QueueTime.js"></script>
 </body>
 </html>

@@ -10,7 +10,7 @@ app = Flask(__name__)
 # Configuration
 app.secret_key = "fallback_key_for_dev_only"  # Use a secure key for production!
 app.config['UPLOAD_FOLDER'] = './uploads'
-app.config['ALLOWED_EXTENSIONS'] = {'gcode', '3mf'}
+app.config['ALLOWED_EXTENSIONS'] = {'3mf'}
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit file size to 10 MB
  
 # Ensure the upload folder exists
@@ -108,27 +108,29 @@ def cleanup_uploads():
     except Exception as e:
         return jsonify({"error": f"Cleanup failed: {str(e)}"}), 500
 
-@app.route("/printer-status", methods=["GET"])
-def printer_status():
-    """Return the current status of printers."""
-    printers_data = [
-        {"id": 1, "name": "Printer A", "status": "active"},
-        {"id": 2, "name": "Printer B", "status": "ready"},
-        {"id": 3, "name": "Printer C", "status": "available"},
-        {"id": 4, "name": "Printer D", "status": "available"},
-        {"id": 5, "name": "Printer E", "status": "available"},
-        {"id": 6, "name": "Printer F", "status": "you"}
-    ]
-    return jsonify(printers_data), 200
+# @app.route("/printer-status", methods=["GET"])
+# def printer_status():
+#    """Return the current status of printers."""
+#    printers_data = [
+#        {"id": 1, "name": "Printer A", "status": "active"},
+#        {"id": 2, "name": "Printer B", "status": "ready"},
+#        {"id": 3, "name": "Printer C", "status": "available"},
+#        {"id": 4, "name": "Printer D", "status": "available"},
+#        {"id": 5, "name": "Printer E", "status": "available"},
+#        {"id": 6, "name": "Printer F", "status": "you"}
+#    ]
+#    return jsonify(printers_data), 1000
 
 
 @app.route("/status", methods=['POST'])
 def get_status():
     """Send dummy status and a randomly generated countdown time."""
     try:
-        random_minutes = random.randint(5, 120)  # Random minutes between 1 and 120
+        # Generate a random countdown time between 1 and 120 minutes
+        random_minutes = random.randint(5, 10)
         generated_time = datetime.utcnow() + timedelta(minutes=random_minutes)
 
+        # Calculate the remaining time in seconds
         current_time = datetime.utcnow()
         time_left_seconds = int((generated_time - current_time).total_seconds())
 
@@ -139,6 +141,45 @@ def get_status():
         }
 
         return jsonify(status_data), 200
+
+    except Exception as e:
+        return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500
+    
+    
+@app.route("/create_countdown", methods=["POST"])
+def create_countdown():
+    """Create a new countdown for a specified printer and print job."""
+    try:
+        data = request.get_json()
+        printer_name = data.get("printerName")
+        print_name = data.get("printName")
+        print_id = data.get("printId")
+
+        if not printer_name or not print_name or not print_id:
+            return jsonify({"error": "Fields 'printerName', 'printName', and 'printId' are required"}), 400
+
+        # Generate a random countdown time between 5 and 15 minutes
+        random_minutes = random.randint(5, 15)
+        generated_time = datetime.utcnow() + timedelta(minutes=random_minutes)
+
+        # Calculate the remaining time in seconds
+        current_time = datetime.utcnow()
+        total_seconds = int((generated_time - current_time).total_seconds())
+
+        # Response data
+        countdown_data = {
+            "printId": print_id,
+            "printer": printer_name,
+            "printName": print_name,
+            "status": "Countdown created successfully",
+            "total_seconds": total_seconds,
+            "end_time": generated_time.isoformat(),
+        }
+
+        # Optionally log the event
+        print(f"New countdown created: {countdown_data}")
+
+        return jsonify(countdown_data), 200
 
     except Exception as e:
         return jsonify({"error": f"An unexpected error occurred: {str(e)}"}), 500

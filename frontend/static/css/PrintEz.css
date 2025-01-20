@@ -16,13 +16,26 @@ body {
 
 /* Apply the animation to the element */
 #infoDowbox {
+    position: absolute;
     margin-top: 430px;
     color: rgb(89, 89, 89);
     border: none;
     cursor: pointer;
     font-size: 12px;
-    max-width: 100%;
-    margin-left: 50% !important;
+    max-width: 12%;
+    margin-left: 11.5% !important;
+    transform: translateX(-50%);
+    text-align: center;
+}
+#infoDowbox3 {
+    position: absolute;
+    margin-top: 440px;
+    color: rgb(89, 89, 89);
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    max-width: 12%;
+    margin-left: 12.5% !important;
     transform: translateX(-50%);
     text-align: center;
 }
@@ -70,11 +83,12 @@ body {
     border: 2px solid #ff5500; 
     background-color: rgb(84, 77, 77);
     padding: 5px;
-    width: 90%; 
+    width: 85%; 
     height: 60px;
-    border-radius: 20px;
+    border-radius: 5px;
     position: relative; /* Allows elements to follow normal flow */
     margin-top: 10px; /* Add spacing between stacked elements */
+    margin-left: 10px;
 }
 .file-icon {
     margin-right: 10px; /* Add space between the icon and file name */
@@ -137,12 +151,15 @@ body {
 }
 /* Countdown timer styles */
 #top{
-margin-left: 50%;
+margin-left: 51%;
 color: white;
 }
 
 #QueueTime {
-    margin-left: 15%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: 10%;
     margin-top: 20px;
     font-size: 19vw;
     height: 35px;
@@ -168,7 +185,22 @@ color: white;
     font-weight: 400;
     color: white;
 }
-
+.queue-box{
+    display: flex; 
+    align-items: center;
+    justify-content: start; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    border: 2px solid #ff5500; 
+    background-color: rgb(84, 77, 77);
+    padding: 5px;
+    width: 85%; 
+    height: 60px;
+    border-radius: 5px;
+    position: relative; /* Allows elements to follow normal flow */
+    margin-top: 10px; /* Add spacing between stacked elements */
+    margin-left: 10px;
+}
 #addToQueueButton {
     position: absolute;
     margin-top: 150px;
@@ -191,12 +223,12 @@ color: white;
 }
 
 .print-box {
-    margin-left: 11.5%;
+    margin-left: 14%;
     height: 200px;
     width: 80%;
-    background: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.hdwallpapers.in%2Fdownload%2Fstars_space_darkness_night_black_sky_background_hd_space-HD.jpg&f=1&nofb=1&ipt=3f8bb52e12dec213b631e00e1cfbaa153b0123f856f71b9fa18d92996a474db8&ipo=images') repeat-x;
-    background-size: 400%;
-    animation: scroll-printing 250s linear infinite;
+    background: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F39%2Fe9%2Fa9%2F39e9a957f793c8702656e4af84b2dc3f.jpg&f=1&nofb=1&ipt=cbea6028f806b667471a6cce34b28b1a76b0a5469d38ee5e1676629ef895bb79&ipo=images') repeat-x;
+    background-size: 200%;
+    animation: scroll-printing 120s linear infinite;
     border: 1px solid white !important; /* Ensure border is not overridden */
     font-size: 25px;
     font-weight: 400;
@@ -242,6 +274,9 @@ color: white;
     color: white;
 }
 
+#TextDinPrint{
+    margin-left: 8%;
+}
 .takeout-prompt {
     position: fixed;
     top: 50%;
