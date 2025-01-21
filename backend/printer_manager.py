@@ -130,7 +130,7 @@ class printer_manager():
                 print("Printer name not found in among printers") 
             
          
-    def get_states(self, states_to_print:list[str] = None):
+    def get_tasks_info(self, states_to_print:list[str] = None):
         """
         Function to get the states of specified printers.
 
@@ -146,9 +146,24 @@ class printer_manager():
         states = {}
         for name in states_to_print:
             
-            states[name] = self.printers[name]._time_remaining
+            states[name] = {"time_remaining": self.printers[name]._time_remaining,
+                            "subtask_name": self.printers[name]._subtask_name,
+                            "total_layers": self.printers[name]._layer_count,
+                            "current_layer": self.printers[name]._current_layer,
+                            "current_stage": self.printers[name]._current_stage,
+                            "current_stage_text": self.printers[name]._current_stage_text,
+                            "gcode_state": self.printers[name].gcode_state}
 
         return states
+    
+
+    def get_printer_states(self, printers: list[str] | None = None):
+        if printers == None:
+            printers = list(self.printers.keys())
+
+        states = {}
+        for printer in printers:
+            states[printer] = self.printers[printer].gcode_state
     
 
     def to_json(self, printers: list[str] | None = None):
@@ -180,7 +195,7 @@ class printer_manager():
         self.files = printer_files
         return printer_files    
     
-    def upload_print(self, printer_name:str, local_file_path:str, printer_file_path):
+    def upload_print(self, printer_name:str, local_file_path:str, printer_file_path:str):
         """
         Function to upload file to printer (.gcode or .3mf)
 
@@ -264,9 +279,9 @@ if __name__ == "__main__":
     p_man.to_json(["S2. Daenerys Targaryen"])
 
     time.sleep(5)
-    print(p_man.get_states())
+    print(p_man.get_tasks_info())
 
-    p_man.start_print_on_printer("S2. Daenerys Targaryen", "/cache/gear_crank_test_1.gcode.3mf")
+    # p_man.start_print_on_printer("S2. Daenerys Targaryen", "/cache/gear_crank_test_1.gcode.3mf")
 
     # with open("devices.json", "w") as devices_file:
     #     devices_file.write(json.dumps(devices, indent=4))
