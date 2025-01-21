@@ -175,6 +175,8 @@ class BambuPrinter:
         self._print_type = ""
         self._skipped_objects = []
 
+        self._plate_clean: bool = False
+
     def start_session(self):
         """
         Initiates a connection to the Bambu Lab printer and provides a stateful
@@ -387,6 +389,8 @@ class BambuPrinter:
         subtask = name[name.rindex("/") + 1::] if "/" in name else name
         subtask = subtask[::-1].replace(".3mf"[::-1], "", 1)[::-1] if subtask.endswith(".3mf") else subtask 
         subtask = subtask[::-1].replace(".gcode"[::-1], "", 1)[::-1] if subtask.endswith(".gcode") else subtask 
+
+        subtask = subtask[:-37]
 
         file["print"]["file"] = self._3mf_file
         file["print"]["url"] = f"file:///sdcard{self._3mf_file}"
@@ -1228,6 +1232,13 @@ class BambuPrinter:
     @property
     def skipped_objects(self):
         return self._skipped_objects
+    
+    @property
+    def plate_clean(self):
+        return self._plate_clean
+    @plate_clean.setter
+    def plate_clean(self, value: bool):
+        self._plate_clean = value
 
 
 def setup_logging():

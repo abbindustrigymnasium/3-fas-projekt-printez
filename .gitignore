@@ -171,5 +171,9 @@ bambu_api_cloud/
 access_code
 printer_files.json
 upload_test.py
-
+uploads/
+frontend/
+backend/BambuPrinter.log.*
+BambuPrinter.log.*
+devices.json
 .vscode/
