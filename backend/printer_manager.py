@@ -281,7 +281,7 @@ if __name__ == "__main__":
     time.sleep(5)
     print(p_man.get_tasks_info())
 
-    # p_man.start_print_on_printer("S2. Daenerys Targaryen", "/cache/gear_crank_test_1.gcode.3mf")
+    # p_man.start_print_on_printer("Printer_name", "/cache/file_on_printer.gcode.3mf")
 
     # with open("devices.json", "w") as devices_file:
     #     devices_file.write(json.dumps(devices, indent=4))
