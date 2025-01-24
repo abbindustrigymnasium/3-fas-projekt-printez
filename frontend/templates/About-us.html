@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./static/css/about.css">
+    <link rel="stylesheet" href="./static/css/HämtaPrint.css">
+    <title>Document</title>
+</head>
+<body>
+  <div class="sidebar">
+    <img id="sidebar-img" src="./static/js/PrintEz.png" alt="Sidebar Image" />
+    <ul>
+      <li><a href="{{ url_for('index') }}" id="option1">Account</a></li>
+      <li><a href="{{ url_for('index') }}" id="option2">Printing</a></li>
+      <li id="select-printing"><a href="{{ url_for('about_us') }}" id="option3">About Us</a></li>
+    </ul>
+  </div>   
+
+    <script src="./static/js/sidebar.js"></script>
+</body>
+</html>

@@ -1,19 +1,15 @@
 /* Upload window*/
 
-body {
-    margin-top: 70px;
-    padding: 0;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* Full viewport height */
-    background-color: #1a1a1a;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-}
 .animation-container {
     text-align: center;
 }
-
+#bottom{
+    background-color: black;
+    color: rgb(136, 136, 136);
+    width: 93%;
+    margin-left: 7%;
+    height: 200px;
+}
 /* Apply the animation to the element */
 #infoDowbox {
     position: absolute;
@@ -51,7 +47,9 @@ body {
     transform: translateX(-50%);
     text-align: center;
 }
-
+#select-printing{
+ background-color: #6f6f6f;
+}
 
 .container {
     display: flex; /* Flexbox container for side-by-side alignment */

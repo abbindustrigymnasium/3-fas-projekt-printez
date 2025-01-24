@@ -98,14 +98,18 @@ async function addToQueue() {
 
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("owner", "Gustav!!!");
 
         try {
+            console.log("1")
             const response = await fetch("/upload", {
                 method: "POST",
                 body: formData,
             });
+            console.log("2")
 
             const result = await response.json();
+            console.log("3")
             if (response.ok) {
                 console.log(`File ${file.name} uploaded successfully.`);
                 queueFiles.push({ name: file.name });  // Add the new file to the queue
@@ -113,7 +117,8 @@ async function addToQueue() {
                 alert(`Error uploading file ${file.name}: ${result.error}`);
             }
         } catch (error) {
-            alert(`Failed to upload file ${file.name}: ${error.message}`);
+            console.log("ehre")
+            console.log(`Failed to upload file ${file.name}: ${error.message}`);
         }
     }
 

@@ -1,17 +1,17 @@
-// Selecting the sidebar and the options
-//const option1 = document.getElementById('option1');
-//const option2 = document.getElementById('option2');
-//const option3 = document.getElementById('option3');
-//const option4 = document.getElementById('option4');
+// Function to switch to About Us page
+function navigateToAboutUs() {
+    window.location.href = "About-us.html"; // Redirects to the about-us.html page
+  }
+  
+  // Function to go to Home page (index.html)
+  function navigateToHome() {
+    window.location.href = "index.html"; // Redirects to the index.html page
+  }
 
-// Function to change content when options are clicked
-//function changeContent(option) {
-//  const content = document.querySelector('.content');
-//  content.innerHTML = `<h1>${option} Content</h1><p>You selected ${option}. You can change the content dynamically here.</p>`;
-//}
-
-// Adding event listeners to each sidebar option
-//option1.addEventListener('click', () => changeContent('Option 1'));
-//option2.addEventListener('click', () => changeContent('Option 2'));
-//option3.addEventListener('click', () => changeContent('Option 3'));
-//option4.addEventListener('click', () => changeContent('Option 4'));
+  function navigateToAccount() {
+    window.location.href = "Account.html"; // Redirects to the index.html page
+  }
+  
+  // Optionally, if you want the account and printing options to load different content,
+  // you can add similar functions like the one for About Us.
+  

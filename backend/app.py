@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
+from flask import Flask, render_template
 import random
 import os
 import shutil
@@ -10,23 +11,35 @@ app = Flask(__name__)
 # Configuration
 app.secret_key = "fallback_key_for_dev_only"  # Use a secure key for production!
 app.config['UPLOAD_FOLDER'] = './uploads'
-app.config['ALLOWED_EXTENSIONS'] = {'3mf'}
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit file size to 10 MB
- 
+app.config['ALLOWED_EXTENSIONS'] = {'gcode', '3mf'}
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit file size to 10 Mb
+
 # Ensure the upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
  
- 
+
 def allowed_file(filename):
     """Check if a file has an allowed extension."""
+    print(app.config)
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
- 
- 
-@app.route("/")
+
+app = Flask(__name__, template_folder=os.path.join('..', 'frontend', 'templates'), static_folder=os.path.join('..', 'frontend', 'static'))
+
+
+
+@app.route('/')
 def index():
-    return app.send_static_file("index.html")
- 
- 
+    return render_template('index.html')
+
+@app.route('/about-us')
+def about_us():
+    return render_template('About-us.html')
+
+@app.route('/account')
+def account():
+    return render_template('Account.html')
+
+  
 @app.route("/upload", methods=["POST"])
 def upload_file():
     """Handle file uploads."""
@@ -56,8 +69,6 @@ def upload_file():
         except Exception as e:
             # Log errors (placeholder for logging)
             return jsonify({"error": f"File processing error: {str(e)}"}), 500
- 
-    return jsonify({"error": "Invalid file type"}), 400
  
 @app.route("/cancel", methods=["POST"])
 def cancel_print():

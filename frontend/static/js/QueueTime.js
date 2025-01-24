@@ -1,20 +1,38 @@
-// Function to fetch the current queue time from the backend and update the UI
-async function updateQueueTime() {
+// Function to fetch the current print queue from the backend and update the UI
+async function updatePrintQueue() {
     try {
-        const response = await fetch('/status', { method: 'POST' });
+        const response = await fetch('/get_queue', { method: 'POST' });
         const data = await response.json();
 
         if (response.ok) {
-            const { total_seconds } = data;
-            const formattedTime = formatTime(total_seconds);
+            const queueContainer = document.getElementById('queueContainer'); // Assuming you have a container for the queue
 
-            // Update the queue time displayed on the page
-            document.getElementById("QueueTime").textContent = formattedTime;
+            // Clear the existing queue
+            queueContainer.innerHTML = '';
+
+            // Loop through the queue and display each job
+            data.forEach(job => {
+                const { print_id, estimated_time_to_completion, file_name, owner } = job;
+                const formattedTime = formatTime(estimated_time_to_completion * 60); // Assuming the time is in minutes
+
+                // Create a new div for each job in the queue
+                const jobElement = document.createElement('div');
+                jobElement.classList.add('queue-item');
+                jobElement.innerHTML = `
+                    <h4>Print Job: ${print_id}</h4>
+                    <p>Owner: ${owner}</p>
+                    <p>File: ${file_name}</p>
+                    <p>Estimated Completion: ${formattedTime}</p>
+                `;
+
+                // Append the job element to the container
+                queueContainer.appendChild(jobElement);
+            });
         } else {
-            console.error('Failed to fetch queue time:', data.error);
+            console.error('Failed to fetch queue data:', data.error);
         }
     } catch (error) {
-        console.error('Error fetching queue time:', error);
+        console.error('Error fetching queue data:', error);
     }
 }
 
@@ -30,8 +48,8 @@ function formatTime(seconds) {
     return formattedTime.trim();
 }
 
-// Example: Fetch and update the queue time every 30 seconds
-setInterval(updateQueueTime, 3000);
+// Example: Fetch and update the print queue every 30 seconds
+setInterval(updatePrintQueue, 30000);
 
 // Initial update on page load
-updateQueueTime();
+updatePrintQueue();
