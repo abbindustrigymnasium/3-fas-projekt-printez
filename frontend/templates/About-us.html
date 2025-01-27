@@ -8,15 +8,23 @@
     <title>Document</title>
 </head>
 <body>
+  <div id="about-us-div"><h1 id="Text-About-Us">PrintEz är ett projekt utvecklat av tre elever på Hitachi Gymnasiet med syftet att förenkla processen för 3D-printing. Plattformen hanterar filer och erbjuder ett virtuellt kösystem som säkerställer att varje utskrift hanteras en i taget. Lösningen är utformad för att göra 3D-printning smidigare och mer organiserad – en print i taget.</h1></div>
   <div class="sidebar">
     <img id="sidebar-img" src="./static/js/PrintEz.png" alt="Sidebar Image" />
     <ul>
-      <li><a href="{{ url_for('index') }}" id="option1">Account</a></li>
+      <li><a href="#" id="account-option" onclick="confirmLogout()">Log out</a></li>
       <li><a href="{{ url_for('index') }}" id="option2">Printing</a></li>
       <li id="select-printing"><a href="{{ url_for('about_us') }}" id="option3">About Us</a></li>
     </ul>
   </div>   
 
+  <div id="logout-modal" class="modal">
+    <div class="modal-content">
+      <p>Are you sure you want to log out?</p>
+      <button onclick="confirmAction()">Yes</button>
+      <button onclick="cancelAction()">No</button>
+    </div>
+  </div>
     <script src="./static/js/sidebar.js"></script>
 </body>
 </html>

@@ -18,13 +18,19 @@
     <div class="sidebar">
         <img id="sidebar-img" src="./static/js/PrintEz.png" alt="Sidebar Image" />
         <ul>
-          <li><a href="{{ url_for('account') }}" id="option1">Account</a></li>
+          <li><a href="#" id="account-option" onclick="confirmLogout()">Log out</a></li>
           <li id="select-printing"><a href="{{ url_for('index') }}" id="option2">Printing</a></li>
           <li><a href="{{ url_for('about_us') }}" id="option3">About Us</a></li>
         </ul>
       </div>
-      
-
+    
+      <div id="logout-modal" class="modal">
+        <div class="modal-content">
+          <p>Are you sure you want to log out?</p>
+          <button onclick="confirmAction()">Yes</button>
+          <button onclick="cancelAction()">No</button>
+        </div>
+      </div>
     <div class="container">
         <div class="Dowbox" ondrop="drop(event)" ondragover="allowDrop(event)">
             <div class="fa-solid fa-cloud-arrow-down" style="font-size: 48px; color: gray;"></div>

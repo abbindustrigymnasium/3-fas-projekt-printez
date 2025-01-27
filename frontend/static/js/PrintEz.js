@@ -29,31 +29,30 @@ async function fetchCountdownData(printId, printerName, printName) {
         console.error('Error fetching countdown data:', error);
     }
 }
-
-function createPrintBox(printId, totalSeconds, remainingSeconds) {
-    const container = document.createElement('div');
-    container.classList.add('print-box');
-    container.id = `print-${printId}`;
-
-    container.innerHTML = `
-        <h3>Print #${printId}</h3>
-        <p>Total Time: ${formatTime(totalSeconds)}</p>
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar-${printId}"></div>
-            <div class="time-label" id="time-label-${printId}"></div>
-        </div>
-        <button class="cancel-btn" id="cancel-btn-${printId}">Cancel</button>
-    `;
-
-    document.getElementById('print-area').appendChild(container);
-    startCountdown(printId, totalSeconds, remainingSeconds);
-
-    // Attach event listener to cancel button
-    document.getElementById(`cancel-btn-${printId}`).addEventListener('click', () => {
-        cancelCountdown(printId);
-    });
-}
-
+//
+////function createPrintBox(printId, totalSeconds, remainingSeconds) {
+//    const container = document.createElement('div');
+//    container.classList.add('print-box');
+//    container.id = `print-${printId}`;
+//
+//    container.innerHTML = `
+//        <h3>Print #${printId}</h3>
+//        <div class="progress-container">
+//            <div class="progress-bar" id="progress-bar-${printId}"></div>
+//            <div class="time-label" id="time-label-${printId}"></div>
+//        </div>
+//        <button class="cancel-btn" id="cancel-btn-${printId}">Cancel</button>
+//    `;
+//
+//    document.getElementById('print-area').appendChild(container);
+//    startCountdown(printId, totalSeconds, remainingSeconds);
+//
+//    // Attach event listener to cancel button
+//    document.getElementById(`cancel-btn-${printId}`).addEventListener('click', () => {
+//        cancelCountdown(printId);
+//    });
+//}
+//
 
 function startCountdown(printId, totalSeconds, remainingSeconds) {
     const progressBar = document.getElementById(`progress-bar-${printId}`);
@@ -66,7 +65,6 @@ function startCountdown(printId, totalSeconds, remainingSeconds) {
             return;
         }
 
-        remainingSeconds -= 1;
         timeLabel.textContent = formatTime(remainingSeconds);
         progressBar.style.width = `${((totalSeconds - remainingSeconds) / totalSeconds) * 100}%`;
     }, 1000);
@@ -110,18 +108,6 @@ async function sendCancelAction(printId) {
         console.error('Error sending cancellation action:', error);
     }
 }
-
-// Socket event listener for plate cleanup requests
-socket.on("request_plate_cleanup", function(cleanup_msg) {
-    console.log("request_plate_cleanup");
-    console.log(cleanup_msg);
-
-    // Extract printId from the message, assuming cleanup_msg contains this information
-    const printId = cleanup_msg.printId || 'unknown';
-
-    // Call createTakeoutPrompt to display the cleanup prompt
-    createTakeoutPrompt(printId, cleanup_msg.message || "A cleanup is required!");
-});
 
 // Function to create a takeout prompt box
 function createTakeoutPrompt(printId, message = "Please take out your print!") {
@@ -180,55 +166,6 @@ async function sendTakeoutAction(printId) {
         console.error('Error sending takeout action:', error);
     }
 }
-
-function formatTime(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    let formattedTime = '';
-    if (hours > 0) formattedTime += `${hours}h `;
-    if (minutes > 0 || hours > 0) formattedTime += `${minutes}m `;
-    formattedTime += `${secs}s`;
-    return formattedTime.trim();
-}
-
-
-// Sample printer data to loop through
-const printerState = {
-    "1-Jerry Seinfeld": {
-        "time_remaining": 0,
-        "subtask_name": "",
-        "total_layers": 0,
-        "current_layer": 0,
-        "current_stage": 0,
-        "current_stage_text": ""
-    },
-    "2-George Costanza": {
-        "time_remaining": 0,
-        "subtask_name": "",
-        "total_layers": 0,
-        "current_layer": 0,
-        "current_stage": 0,
-        "current_stage_text": ""
-    },
-    "S1. Arya Stark": {
-        "time_remaining": 130,
-        "subtask_name": "Amir-fahdel_240S_servo-hållare(NEW)_take-4.3mf",
-        "total_layers": 466,
-        "current_layer": 133,
-        "current_stage": 0,
-        "current_stage_text": ""
-    },
-    "S2. Daenerys Targaryen": {
-        "time_remaining": 146,
-        "subtask_name": "uploads_files_3144917_Cell+phone+holder+3DTROOP+v2(1).stl",
-        "total_layers": 334,
-        "current_layer": 41,
-        "current_stage": 0,
-        "current_stage_text": ""
-    },
-    // More if neded
-};
 
 // Loop through the printerState data and call fetchCountdownData
 for (const [key, value] of Object.entries(printerState)) {
