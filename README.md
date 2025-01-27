@@ -22,4 +22,9 @@ Note that there probably are some unnecessary libraries that have yet to be remo
 Follow the steps in libchanges/file_changes.md to update the bambuprintermanager this will hopefully be made into a module at some point when there's time.
 ### 5. Fix your .env file
 Create a file in you project directory called .env, and fill it with all the information detailed in example.env.
-Note that if any of your printer_names  
+Note that if any of your printer_names include underscores it might screw with the things since all spaces sometimes get converted to underscores and underscores to spaces.
+
+### 6. Run app.py to start server
+```bash
+python backend/app.py
+```

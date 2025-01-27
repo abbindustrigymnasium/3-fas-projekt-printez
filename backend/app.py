@@ -65,7 +65,7 @@ def emit_new_printer_times(p_man, q_man):
                 new_file_path = f'/cache/{q_man.prints[next_print]["file_path"].split("\\")[-1]}'
                 
                 p_man.upload_print(printer_name, q_man.prints[next_print]["file_path"], f"{new_file_path}")
-                # time.sleep(1) Might need to let upload finsish 
+                # time.sleep(1) Might need to let upload finish 
                 print(f"trying to print, {next_print}")
                 p_man.start_print_on_printer(printer_name, new_file_path)
 
@@ -261,12 +261,6 @@ if __name__ == "__main__":
     socketio.run(app, debug=True, host="localhost")
     time.sleep(1)
     p_man.disconnect_printers()
-
-
-
-
-
-
 
 
 

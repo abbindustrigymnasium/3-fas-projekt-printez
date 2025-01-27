@@ -1,5 +1,8 @@
 """
-File for queue_manager. The class that should handle the queue of prints with functions to add, remove and get prints.
+File: queue_manager.py
+Author: Samuel Olsson, fdABB-Gym-Samuel
+Date Created: i forgor probably 11/26/2024
+Description: File containing the printer_manager class, which handles the queue of printers, i.e the order in which prints should print.
 """
 
 """
