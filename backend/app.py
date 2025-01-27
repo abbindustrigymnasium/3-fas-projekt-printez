@@ -129,7 +129,7 @@ def emit_new_printer_times(p_man, q_man):
     socketio.emit("update_printer_times", updated_task_infos)
 
 @scheduler.scheduled_job('interval', seconds=10, kwargs={"q_man": q_man, "p_man":p_man})
-def get_printer_states(q_man, p_man):
+def send_new_prelim_queue(q_man, p_man):
     tasks_info = p_man.get_tasks_info()
 
     task_times = {}
@@ -231,9 +231,10 @@ def upload_file():
     try:
         decoded_id_token = validate_and_decode_jwt(id_token)
         owner = decoded_id_token.get("email")# or decoded_id_token.get("preferred_username") or decoded_id_token.get("sub")
-        print(owner)
+
         if not owner:
             return jsonify({"error": "Unable to determine file owner from ID token"}), 400
+
     except ValueError as e:
         return jsonify({"error": f"Token validation failed: {str(e)}"}), 401
     
@@ -242,7 +243,6 @@ def upload_file():
         return jsonify({"error": "No file part in the request"}), 400
     
     file = request.files["file"]
-    # owner = request.form.get("owner")
 
     if file.filename == "":
         return jsonify({"error": "No file selected"}), 400
@@ -286,16 +286,33 @@ def upload_file():
                 print(f"File, {filename}, succcessfully deleted")
 
             return jsonify({"error": "Unable to add file to queue.", "reason": f"{str(e)}"}), 500
-        
-    # Needs to be updated when tokens are in use
-    # **Ahem, Ahem** (zacke)
+
     return jsonify({"error": "Invalid file type"}), 400
 
 
 @app.route("/cancel/<print_id>", methods=["POST"])
 def cancel_print(print_id):
+    id_token = session.get("id_token")
+    if not id_token:
+        return jsonify({"error": "User not authenticated"}), 401
+    try:
+        decoded_id_token = validate_and_decode_jwt(id_token)
+        owner_email = decoded_id_token.get("email")
+
+        if not owner_email:
+            return jsonify({"error": "Unable to determine file owner from ID token"}), 400
+        
+    except ValueError as e:
+        return jsonify({"error": f"Token validation failed: {str(e)}"}), 401
+    
+
     if print_id in q_man.prints:
         print_in_queue = q_man.prints[print_id]
+
+        print_owner = print_in_queue["owner"]
+
+        if print_owner != owner_email:
+            return "Print doesn't belong to user", 401
 
         # needs to verify that owner sent request
 
@@ -304,7 +321,9 @@ def cancel_print(print_id):
         
         q_man.remove_print(print_id)
 
-        return "Print succesfully removed"
+        send_new_prelim_queue(q_man, p_man)
+
+        return "Print succesfully removed", 200
 
     else:
         printer_name, currently_printing, gcode_state = p_man.id_is_printing(print_id)

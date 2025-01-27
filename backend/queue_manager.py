@@ -50,7 +50,7 @@ class queue_manager():
         filepath_parts = filepath.split('.', 2)  # Split into at most 3 parts
         filepath_with_uuid = f".{filepath_parts[1]}_{str(print_id)}.{filepath_parts[2]}"
 
-        self.prints[print_id] = {
+        self.prints[str(print_id)] = {
             "owner": owner,
             "file_path": filepath_with_uuid,
             "estimated_time_to_print": estim_time,
@@ -59,8 +59,10 @@ class queue_manager():
             "time_diff": estim_time
         }
 
+        print(self.prints)
 
-        successful = True if self.prints[print_id] else False
+
+        successful = True if self.prints[str(print_id)] else False
         return print_id, successful
 
     def remove_print(self, print_to_remove: str):

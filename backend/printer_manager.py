@@ -323,8 +323,8 @@ class printer_manager():
             as well as two empty strings to allow for unpacking     
         """
         for printer_name, printer in self.printers.items():
-            if printer.currently_printing["print_id"] == print_id:
-                return printer_name, printer.currently_printing, printer.gcode_state
+            if printer._currently_printing["print_id"] == print_id:
+                return printer_name, printer._currently_printing, printer.gcode_state
             
         return False, "", ""
 

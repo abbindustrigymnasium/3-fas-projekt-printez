@@ -15,9 +15,19 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.hazmat.backends import default_backend
 from functools import wraps
+import os
+from dotenv import load_dotenv
 
 # === Helper functions ===
-
+# MSAL Configuration
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+TENANT_ID = os.getenv("TENANT_ID")
+AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
+REDIRECT_PATH = os.getenv("REDIRECT_PATH")
+SCOPES = os.getenv("SCOPES").split(",")
+JWKS_URI = f"{AUTHORITY}/discovery/v2.0/keys"
+MICROSOFT_PUBLIC_KEYS = None
 
 def jwk_to_rsa_key(jwk):
     n = int.from_bytes(base64.urlsafe_b64decode(jwk["n"] + "=="), "big")
