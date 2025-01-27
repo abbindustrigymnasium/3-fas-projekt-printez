@@ -3,6 +3,8 @@
 PrintEz is a 3d-printer-managing website with a focus on printers from Bambu labs, specifically the P1S.
 
 
+## Planing and design
+Our preliminary design and plans for this project: https://www.figma.com/design/BtAkAuIYfR6WDcD6cwmRW5/Printez?node-id=0-1&t=6FW0GLqrLv2Yiv9I-1
 
 ## Installation
 ### 1. Clone the repo
