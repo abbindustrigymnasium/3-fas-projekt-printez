@@ -130,7 +130,14 @@ class printer_manager():
     def pushall(self, printers_to_push: list[str] | None = None):
         """
         Function to push all informatino of all printers. This will resend it from the printer. To use the information that exists in memory, use to_json().
+        It is also necessary to call to_json() after
+
+        Params:
+            - list[str]
+                - printers_to_push: The names of all printers which complete states should be refreshed
         
+        Returns:
+            - None
         """
         if printers_to_push == None:
             printers_to_push = list(self.printers.keys())
@@ -163,11 +170,23 @@ class printer_manager():
                             "current_layer": self.printers[name]._current_layer,
                             "current_stage": self.printers[name]._current_stage,
                             "current_stage_text": self.printers[name]._current_stage_text,
-                            "gcode_state": self.printers[name].gcode_state}
+                            "gcode_state": self.printers[name].gcode_state,
+                            "percentage_complete": self.printers[name]._percent_complete}
 
         return states
     
     def get_printer_states(self, printers: list[str] | None = None):
+        """
+        Function to get the gcode_state (can be something like "RUNNING", "FINISHED", "FAILED" or "PREPARING")
+
+        Params:
+            - list[str]
+                -printers: The names of all the printers which g_code_states to get, if set to None or not set at all will default to all printers currently registered to printer_manager
+
+        Returns:
+            -dict[str: str]
+                - states: Dict with printer_names as keys and the states as values
+        """
         if printers == None:
             printers = list(self.printers.keys())
 
@@ -176,6 +195,17 @@ class printer_manager():
             states[printer] = self.printers[printer].gcode_state
     
     def to_json(self, printers: list[str] | None = None):
+        """
+        Function to get all information stored about a specific printer.
+
+        Params:
+            - list[str]
+                - printers: Names of printers to get states of. If set to None or not set at all it will default to all printers currently registered to the printer_manager
+
+        Returns:
+            - dict[str: dict]
+                - infos: The complete information on all printers requested. The names of the printers being the keys and the infos (dicts themselves) being the info on a specific printer 
+        """
         if printers == None:
             printers = self.printers
 
@@ -186,6 +216,9 @@ class printer_manager():
         return infos
     
     def get_sdcard_files(self, printers: list | None = None, only_3mf_files: bool = True, get_from_printer = True):
+        """
+        Function to return get the files of all the printers specified, this uses ftps and needs to be done when connected to the same wifi as the printers
+        """
         if printers == None:
             printers = list(self.printers.keys())
         printer_files = {}

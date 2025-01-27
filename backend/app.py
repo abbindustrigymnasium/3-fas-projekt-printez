@@ -51,7 +51,8 @@ def emit_new_printer_times(p_man, q_man):
         
         printer_plate_is_clean = p_man.printers[printer_name]._plate_clean
         if printer_not_printing and not printer_plate_is_clean:
-            socketio.emit("request_plate_cleanup", f"{printer_name} has status: {printer_info["gcode_state"]}. Please clean plate!")#, to="queue")
+            
+            socketio.emit("request_plate_cleanup", {"msg": f"{printer_name} has status: {printer_info["gcode_state"]}. Please clean plate!", "printer_name": printer_name})
 
 
         elif printer_not_printing and printer_plate_is_clean:
@@ -210,7 +211,7 @@ def plate_clean_confirmation(printer_name):
         p_man.printers[printer_name]._plate_clean = True
         p_man.printers[printer_name]._currently_printing = {"print_id": None, "owner": None, "filename": None}
 
-        socketio.emit("plate_is_clean", f"{printer_name}'s plate has been cleaned")
+        socketio.emit("plate_is_clean", {"msg": f"{printer_name}'s plate has been cleaned", "printer_name": printer_name})
 
         return "Thank You. +500 PrintEzCredit"
     

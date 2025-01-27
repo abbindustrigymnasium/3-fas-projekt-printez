@@ -177,3 +177,4 @@ backend/BambuPrinter.log.*
 BambuPrinter.log.*
 devices.json
 .vscode/
+modified_libs/
