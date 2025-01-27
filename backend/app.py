@@ -271,7 +271,7 @@ def upload_file():
             file_data = {"filename": filename, "owner": owner}
 
             socketio.emit("file_added_to_queue", file_data)
-            return jsonify({"status": "File uploaded successfully", "file_path": filepath}), 200
+            return jsonify({"status": "File uploaded successfully", "filename": file.filename, "uuid": file_uuid}), 200
 
         except Exception as e:
             print(f"Something went wrong adding file, {filename}, to queue. Failed. Error: {str(e)}")
