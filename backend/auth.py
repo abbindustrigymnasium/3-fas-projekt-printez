@@ -1,3 +1,11 @@
+"""
+File: auth.py
+Author: Zackarias Jansson (zacke427)
+Date Created: 2024-01-27
+Description: Module with that handles the necessary authentication and verification of login
+
+"""
+
 from flask import Flask, request, jsonify, session, redirect, url_for, render_template
 from msal import ConfidentialClientApplication
 import os
@@ -11,13 +19,6 @@ from cryptography.hazmat.backends import default_backend
 from functools import wraps
 from flask_session import Session
 from dotenv import load_dotenv
-
-app = Flask(__name__)
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = os.getenv("SESSION_TYPE")
-Session(app)
-
-
 
 
 # MSAL Configuration
@@ -116,90 +117,3 @@ def authorized(f):
 
         return f(*args, **kwargs)
     return decorated_function
-
-# === Routes ===
-@app.route("/")
-def index():
-    """
-    Home page.
-    """
-    token = session.get("id_token")
-    if not token:
-        return redirect(url_for("login"))
-
-    try:
-        user_info = validate_and_decode_jwt(token)
-        return render_template("index.html", user_info=user_info)
-    except ValueError:
-        return redirect(url_for("login"))
-
-
-@app.route("/login")
-def login():
-    """
-    Redirect to Microsoft Entra ID login page.
-    """
-    auth_url = msal_app.get_authorization_request_url(
-        SCOPES,
-        redirect_uri=url_for("auth_callback", _external=True),
-    )
-    return redirect(auth_url)
-
-
-@app.route(REDIRECT_PATH)
-def auth_callback():
-    """ 
-    Handle the OAuth callback.
-    """
-    code = request.args.get("code")
-    if not code:
-        return jsonify({"error": "Authorization failed. No code provided."}), 400
-
-    try:
-        result = msal_app.acquire_token_by_authorization_code(
-            code,
-            scopes=SCOPES,
-            redirect_uri=url_for("auth_callback", _external=True),
-        )
-
-        if "id_token" in result:
-            session["access_token"] = result["access_token"]
-            session["id_token"] = result.get("id_token")
-            print(f"Access Token: {result['id_token'][:50]}...")
-            return redirect(url_for("index"))
-
-        return jsonify({"error": "Failed to acquire access token."}), 400
-
-    except Exception as e:
-        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-
-
-@app.route("/logout")
-def logout():
-    session.clear()
-    logout_url = (
-        f"{AUTHORITY}/logout"
-        f"?post_logout_redirect_uri={url_for('index', _external=True)}"
-    )
-    return redirect(logout_url)
-
-
-@app.route("/upload", methods=["POST"])
-@authorized
-def upload_file():
-    """
-    Handle file uploads and associate them with the authenticated user.
-    """
-    id_token = session.get("id_token")
-    if not id_token:
-        return jsonify({"error": "User not authenticated"}), 401
-
-    try:
-        decoded_id_token = validate_and_decode_jwt(id_token)
-        owner = decoded_id_token.get("email") or decoded_id_token.get("preferred_username") or decoded_id_token.get("sub")
-        print(owner)
-        if not owner:
-            return jsonify({"error": "Unable to determine file owner from ID token"}), 400
-    except ValueError as e:
-        return jsonify({"error": f"Token validation failed: {str(e)}"}), 401
-    #route continue in backend
