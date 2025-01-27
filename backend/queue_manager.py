@@ -123,6 +123,7 @@ class queue_manager():
                 for print_name, print_info in self.prints.items()
                 if not print_info.get('wait_to_end_of_day', True)
             ]
+
         else:
             filtered_prints = [
                 (print_name, print_info) 
@@ -133,8 +134,12 @@ class queue_manager():
         if not filtered_prints:
             filtered_prints = self.prints
 
-        next_print = min(filtered_prints, key=lambda x: x[1]['time_diff'])
+        try:
+            next_print = min(filtered_prints, key=lambda x: x[1]['time_diff'])
 
+        except ValueError:
+            return None
+        
         if next_print:
             return next_print[0]
 

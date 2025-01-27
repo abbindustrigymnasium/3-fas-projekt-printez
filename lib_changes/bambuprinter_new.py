@@ -175,7 +175,8 @@ class BambuPrinter:
         self._print_type = ""
         self._skipped_objects = []
 
-        self._plate_clean: bool = False
+        self._plate_clean: bool = False # Should be set to false on startup usually
+        self._currently_printing = {"print_id": None, "owner": None, "filename": None}
 
     def start_session(self):
         """
@@ -222,7 +223,6 @@ class BambuPrinter:
             printer.state = PrinterState.QUIT
 
         self.client =  mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
-        print("here")
 
         self.client.on_connect = on_connect
         self.client.on_disconnect = on_disconnect
@@ -934,6 +934,10 @@ class BambuPrinter:
                     self.config.firmware_version = module["sw_ver"]
                 if "ams" in module["name"]:
                     self.config.ams_firmware_version = module["sw_ver"]
+
+        elif message == "":
+            pass
+
         else:
             logger.warn("unknown message type received")
             
@@ -1240,6 +1244,12 @@ class BambuPrinter:
     def plate_clean(self, value: bool):
         self._plate_clean = value
 
+    @property
+    def currently_printing(self):
+        return self._currently_printing
+    @currently_printing.setter
+    def currently_printing(self, print_id, owner, filename):
+        self._currently_printing = {"print_id": print_id, "owner": owner, "filename": filename}
 
 def setup_logging():
     config_file = os.path.dirname(os.path.realpath(__file__)) + "/bambuprinterlogger.json"

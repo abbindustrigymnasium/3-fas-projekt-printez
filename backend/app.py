@@ -15,7 +15,7 @@ from printing_utils import extract_bambulab_estimated_time
 load_dotenv()
 
  
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../frontend/templates", static_folder="../frontend/static")
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "fallback_key_for_dev_only")  # Replace for production!
 socketio = SocketIO(app, cors_allowed_origins="*")
  
@@ -23,9 +23,6 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 app.config['UPLOAD_FOLDER'] = './uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'gcode', '3mf'}
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit file size to 10 MB
-
-
-user_rooms = {}
 
  
 scheduler = BackgroundScheduler()
@@ -45,20 +42,23 @@ def allowed_file(filename):
 
 @scheduler.scheduled_job('interval', seconds=10, kwargs={"p_man": p_man, "q_man": q_man})
 def emit_new_printer_times(p_man, q_man):
-    # socketio.emit("update_printer_times", "Hello")
     updated_task_infos = p_man.get_tasks_info()
-    # updated_task_infos["owner"] = q_man.get_owner_of_subtask()
-    print(updated_task_infos)
+
     for printer_name, printer_info in updated_task_infos.items():
         printer_not_printing: bool = (printer_info["gcode_state"] == "FINISH" 
                                       or printer_info["gcode_state"] == "FAILED" 
-                                      or printer_info["gcode_state"] == "IDLE" )
+                                      or printer_info["gcode_state"] == "IDLE")
+        
+        printer_plate_is_clean = p_man.printers[printer_name]._plate_clean
+        if printer_not_printing and not printer_plate_is_clean:
+            socketio.emit("request_plate_cleanup", f"{printer_name} has status: {printer_info["gcode_state"]}. Please clean plate!")#, to="queue")
 
-        if printer_not_printing and not p_man.printers[printer_name].plate_clean:
-            socketio.emit("request_plate_cleanup", f"{printer_name} has status: {printer_info["gcode_state"]}. Please clean plate!", to="queue")
 
-        elif printer_not_printing and p_man.printers[printer_name].plate_clean:
+        elif printer_not_printing and printer_plate_is_clean:
             next_print = q_man.get_next_print()
+
+
+            p_man.printers[printer_name]._currently_printing = {"print_id": None, "owner": None, "filename": None}
 
             if next_print:
                 new_file_path = f'/cache/{q_man.prints[next_print]["file_path"].split("\\")[-1]}'
@@ -67,6 +67,11 @@ def emit_new_printer_times(p_man, q_man):
                 # time.sleep(1) Might need to let upload finsish 
                 print(f"trying to print, {next_print}")
                 p_man.start_print_on_printer(printer_name, new_file_path)
+
+                next_print_owner = q_man.prints[next_print]["owner"] 
+                next_print_filename = q_man.prints[next_print]["file_path"].split("\\")[-1]
+                
+                p_man.printers[printer_name]._currently_printing = {"print_id": next_print, "owner": next_print_owner, "filename": next_print_filename}
 
                 file_path_to_delete = Path(q_man.prints[next_print]["file_path"])
                 file_path_to_delete.unlink()
@@ -82,24 +87,30 @@ def emit_new_printer_times(p_man, q_man):
 
 @scheduler.scheduled_job('interval', seconds=10, kwargs={"q_man": q_man, "p_man":p_man})
 def get_printer_states(q_man, p_man):
-    # printer_states = p_man.get_printer_states()
     tasks_info = p_man.get_tasks_info()
-    # print(tasks_info)
+
     task_times = {}
     for task_name, task_info in tasks_info.items():
         task_times[task_name] = task_info["time_remaining"]
 
     prelim_queue = q_man.get_prelim_queue(task_times)
-    print(prelim_queue)
+
     socketio.emit("prelim_queue", prelim_queue)
 
 
 # === Routes ===
  
-@app.route("/")
+@app.route('/')
 def index():
-    """Serve the main HTML page."""
-    return app.send_static_file("index.html")
+    return render_template('index.html')
+ 
+@app.route('/about-us')
+def about_us():
+    return render_template('About-us.html')
+ 
+@app.route('/account')
+def account():
+    return render_template('Account.html')
 
  
 @app.route("/upload", methods=["POST"])
@@ -109,13 +120,13 @@ def upload_file():
     """
     if "file" not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
- 
+    
     file = request.files["file"]
-    # print(request.form)
     owner = request.form.get("owner")
+
     if file.filename == "":
         return jsonify({"error": "No file selected"}), 400
- 
+    
     if allowed_file(file.filename):
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
@@ -130,20 +141,16 @@ def upload_file():
         
         except Exception as e:
             print(f"Failed to save file, {filename}. Reason: {str(e)}")
-            # q_man.remove_print(file_uuid)
-            # print("Removed file from queue")
             
             return jsonify({"error": f"File saving error: {str(e)}"}), 500
 
         try:
             estimated_time = extract_bambulab_estimated_time(filepath_with_uuid)
-            file_uuid, _ = q_man.add_new_print(owner, filepath, estimated_time)
 
+            file_uuid, _ = q_man.add_new_print(owner, filepath, estimated_time, file_uuid)
             file_data = {"filename": filename, "owner": owner}
+
             socketio.emit("file_added_to_queue", file_data)
-
-            join_room("queue")
-
             return jsonify({"status": "File uploaded successfully", "file_path": filepath}), 200
 
         except Exception as e:
@@ -164,17 +171,55 @@ def upload_file():
     # **Ahem, Ahem** (zacke)
     return jsonify({"error": "Invalid file type"}), 400
 
-@app.route("/plate_is_clean/<id>", methods=["POST"])
-def plate_clean_confirmation():
+
+@app.route("/cancel/<print_id>")
+def cancel_print(print_id):
+    if print_id in q_man.prints:
+        print_in_queue = q_man.prints[print_id]
+
+        # needs to verify that owner sent request
+
+        filepath_to_delete = Path(print_in_queue["file_path"])
+        filepath_to_delete.unlink()
+        
+        q_man.remove_print(print_id)
+
+        return "Print succesfully removed"
+
+    else:
+        printer_name, currently_printing, gcode_state = p_man.id_is_printing(print_id)
+        if printer_name is False:
+            return "print not found"
+        
+        # Stop print
+        plate_clean = p_man.stop_print_on_printers([printer_name])[printer_name]
+
+        # Let the scheduled function handle starting prints
+        p_man.printers[printer_name]._plate_clean = plate_clean
+        
+
+
+@app.route("/plate_is_clean/<printer_name>", methods=["POST"])
+def plate_clean_confirmation(printer_name):
     """
     Confirm printing plate is clean
     """
-    printer_name:str = id.replace("_", " ")
-    p_man.printers[printer_name].clean_plate(True)
+    printer_name:str = printer_name.replace("_", " ")
 
-    socketio.emit("plate_is_clean", f"{printer_name}'s plate has been cleaned")
+    try:
+        p_man.printers[printer_name]._plate_clean = True
+        p_man.printers[printer_name]._currently_printing = {"print_id": None, "owner": None, "filename": None}
 
-    return "Thank You +500 PrinterCredit"
+        socketio.emit("plate_is_clean", f"{printer_name}'s plate has been cleaned")
+
+        return "Thank You. +500 PrintEzCredit"
+    
+    except KeyError:
+        return "No printer with that name connected", 400
+    
+    except Exception as e:
+        print(f"Something fucked up when recieving plate is clean.\n Error: {e}")
+        return f"Something went wrong, no one knows what, heres an error: {e}", 500 
  
  
 # === SocketIO Events ===
@@ -183,8 +228,6 @@ def plate_clean_confirmation():
 def handle_connect():
     """Handle client connection."""
     tasks_infos = p_man.get_tasks_info()
-    # updated_task_infos["owner"] = q_man.get_owner_of_subtask()
-    # print(updated_task_infos)
 
     task_times = {}
     for task_name, task_info in tasks_infos.items():
@@ -193,21 +236,6 @@ def handle_connect():
     prelim_queue = q_man.get_prelim_queue(task_times)
     emit("update_printer_times", tasks_infos)
     emit("prelim_queue", prelim_queue)
- 
-#
-# I dont think this will be used, but maybe
-#
-
-# def broadcast_printer_status():
-#     """Broadcast printer statuses to all connected clients."""
-#     while True:
-#         try:
-#             statuses = p_man.print_states()
-#             socketio.emit("printer_status_update", statuses)
-#         except Exception as e:
-#             socketio.emit("error", {"error": str(e)})
-#         socketio.sleep(5)
- 
  
  
 if __name__ == "__main__":
@@ -219,15 +247,27 @@ if __name__ == "__main__":
     # Decide what printers to connect to, for testing purposes only using one
     printers_to_connect = []
     for device in devices:
-        if device["name"][:2] == "S5":
+        if device["name"][:2] == "S4":
             printers_to_connect.append(device)
 
     p_man.connect_printers(printers_to_connect)
     time.sleep(1) # Should always do after connecting printers 
 
+
     scheduler.start()
  
     # Run Flask app with SocketIO
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, host="localhost")
     time.sleep(1)
     p_man.disconnect_printers()
+
+
+
+
+
+
+
+
+
+    ######
+    # Note to self, when gcode state is FAILED time remaining isnt reset to 0

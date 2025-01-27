@@ -82,6 +82,6 @@ def parse_estimated_time_line(line: str):
 
 
 if __name__ == "__main__":
-    filepath = "my_dir/my_file.gcode.3mf" 
+    three_mf_filepath = "backend/uploads/gear_crank.gcode.3mf" 
     
-    print(extract_bambulab_estimated_time(filepath))
+    print(extract_bambulab_estimated_time(three_mf_filepath))
