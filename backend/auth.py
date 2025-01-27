@@ -6,9 +6,7 @@ Description: Module with that handles the necessary authentication and verificat
 
 """
 
-from flask import Flask, request, jsonify, session, redirect, url_for, render_template
-from msal import ConfidentialClientApplication
-import os
+from flask import jsonify, session, redirect, url_for 
 import requests
 import base64
 from jwt import decode as jwt_decode, get_unverified_header
@@ -17,27 +15,6 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from cryptography.hazmat.backends import default_backend
 from functools import wraps
-from flask_session import Session
-from dotenv import load_dotenv
-
-
-# MSAL Configuration
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-TENANT_ID = os.getenv("TENANT_ID")
-AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
-REDIRECT_PATH = os.getenv("REDIRECT_PATH")
-SCOPES = os.getenv("SCOPES")
-JWKS_URI = f"{AUTHORITY}/discovery/v2.0/keys"
-MICROSOFT_PUBLIC_KEYS = None
-
-
-# MSAL Confidential Client
-msal_app = ConfidentialClientApplication(
-    CLIENT_ID,
-    authority=AUTHORITY,
-    client_credential=CLIENT_SECRET,
-)
 
 # === Helper functions ===
 
