@@ -1,3 +1,12 @@
+"""
+File: app.py
+Author: Zackarias (Zacke427), Samuel Olsson (fd-ABBGym-Samuel)(mainly integrating with other modules)
+Date Created: 2024-11-26
+Description: File containing the backend app itself and that manages logic for what to do when a specific event happens.
+
+"""
+
+
 from flask import Flask, request, jsonify, session, send_file, render_template, redirect, url_for
 from flask_socketio import SocketIO, emit, join_room, leave_room, rooms, close_room
 from flask_session import Session
@@ -221,7 +230,7 @@ def upload_file():
 
     try:
         decoded_id_token = validate_and_decode_jwt(id_token)
-        owner = decoded_id_token.get("email") or decoded_id_token.get("preferred_username") or decoded_id_token.get("sub")
+        owner = decoded_id_token.get("email")# or decoded_id_token.get("preferred_username") or decoded_id_token.get("sub")
         print(owner)
         if not owner:
             return jsonify({"error": "Unable to determine file owner from ID token"}), 400
@@ -233,7 +242,7 @@ def upload_file():
         return jsonify({"error": "No file part in the request"}), 400
     
     file = request.files["file"]
-    owner = request.form.get("owner")
+    # owner = request.form.get("owner")
 
     if file.filename == "":
         return jsonify({"error": "No file selected"}), 400

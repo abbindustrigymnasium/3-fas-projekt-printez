@@ -1,7 +1,7 @@
 """
 File: auth.py
 Author: Zackarias Jansson (zacke427)
-Date Created: 2024-01-27
+Date Created: 2025-01-27
 Description: Module with that handles the necessary authentication and verification of login
 
 """
