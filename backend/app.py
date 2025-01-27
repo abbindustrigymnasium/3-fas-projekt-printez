@@ -1,5 +1,7 @@
-from flask import Flask, request, jsonify, send_file, render_template
+from flask import Flask, request, jsonify, session, send_file, render_template, redirect, url_for
 from flask_socketio import SocketIO, emit, join_room, leave_room, rooms, close_room
+from flask_session import Session
+from msal import ConfidentialClientApplication
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
@@ -9,8 +11,15 @@ from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
 from pathlib import Path
-
+import base64
+from jwt import decode as jwt_decode, get_unverified_header
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives.serialization import load_pem_public_key
+from cryptography.hazmat.backends import default_backend
+from functools import wraps
 from printing_utils import extract_bambulab_estimated_time
+from auth import validate_and_decode_jwt
 
 load_dotenv()
 
@@ -23,6 +32,24 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 app.config['UPLOAD_FOLDER'] = './uploads'
 app.config['ALLOWED_EXTENSIONS'] = {'gcode', '3mf'}
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit file size to 10 MB
+
+
+# MSAL Configuration
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+TENANT_ID = os.getenv("TENANT_ID")
+AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
+REDIRECT_PATH = os.getenv("REDIRECT_PATH")
+SCOPES = os.getenv("SCOPES")
+JWKS_URI = f"{AUTHORITY}/discovery/v2.0/keys"
+MICROSOFT_PUBLIC_KEYS = None
+
+
+msal_app = ConfidentialClientApplication(
+    CLIENT_ID,
+    authority=AUTHORITY,
+    client_credential=CLIENT_SECRET,
+)
 
  
 scheduler = BackgroundScheduler()
@@ -101,17 +128,77 @@ def get_printer_states(q_man, p_man):
 
 # === Routes ===
  
-@app.route('/')
+@app.route("/", methods=["GET"])
 def index():
-    return render_template('index.html')
+    """
+    Home page.
+    """
+    token = session.get("id_token")
+    if not token:
+        return redirect(url_for("login"))
+
+    try:
+        user_info = validate_and_decode_jwt(token)
+        return render_template("index.html", user_info=user_info)
+    except ValueError:
+        return redirect(url_for("login"))
  
-@app.route('/about-us')
+@app.route('/about-us', methods=["GET"])
 def about_us():
     return render_template('About-us.html')
  
-@app.route('/account')
+@app.route('/account', methods=["GET"])
 def account():
     return render_template('Account.html')
+
+@app.route("/login", methods=["GET"])
+def login():
+    """
+    Redirect to Microsoft Entra ID login page.
+    """
+    auth_url = msal_app.get_authorization_request_url(
+        SCOPES,
+        redirect_uri=url_for("auth_callback", _external=True),
+    )
+    return redirect(auth_url)
+
+
+@app.route(REDIRECT_PATH)
+def auth_callback():
+    """ 
+    Handle the OAuth callback.
+    """
+    code = request.args.get("code")
+    if not code:
+        return jsonify({"error": "Authorization failed. No code provided."}), 400
+
+    try:
+        result = msal_app.acquire_token_by_authorization_code(
+            code,
+            scopes=SCOPES,
+            redirect_uri=url_for("auth_callback", _external=True),
+        )
+
+        if "id_token" in result:
+            session["access_token"] = result["access_token"]
+            session["id_token"] = result.get("id_token")
+            print(f"Access Token: {result['id_token'][:50]}...")
+            return redirect(url_for("index"))
+
+        return jsonify({"error": "Failed to acquire access token."}), 400
+
+    except Exception as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+    
+
+@app.route("/logout", methods=["GET"])
+def logout():
+    session.clear()
+    logout_url = (
+        f"{AUTHORITY}/logout"
+        f"?post_logout_redirect_uri={url_for('index', _external=True)}"
+    )
+    return redirect(logout_url)
 
  
 @app.route("/upload", methods=["POST"])
@@ -119,6 +206,21 @@ def upload_file():
     """
     Function to handle file uploads. 
     """
+
+    id_token = session.get("id_token")
+    if not id_token:
+        return jsonify({"error": "User not authenticated"}), 401
+
+    try:
+        decoded_id_token = validate_and_decode_jwt(id_token)
+        owner = decoded_id_token.get("email") or decoded_id_token.get("preferred_username") or decoded_id_token.get("sub")
+        print(owner)
+        if not owner:
+            return jsonify({"error": "Unable to determine file owner from ID token"}), 400
+    except ValueError as e:
+        return jsonify({"error": f"Token validation failed: {str(e)}"}), 401
+    
+
     if "file" not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
     
@@ -173,7 +275,7 @@ def upload_file():
     return jsonify({"error": "Invalid file type"}), 400
 
 
-@app.route("/cancel/<print_id>")
+@app.route("/cancel/<print_id>", methods=["POST"])
 def cancel_print(print_id):
     if print_id in q_man.prints:
         print_in_queue = q_man.prints[print_id]
