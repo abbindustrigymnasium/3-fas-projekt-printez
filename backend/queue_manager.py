@@ -120,7 +120,7 @@ class queue_manager():
                 uuid/string - uuid of print to print 
         """
         self.update_print_times()
-        if datetime.now().hour < 16: 
+        if datetime.now().hour < self.end_of_day_hour and datetime.now().hour > self.start_of_day_hour: 
             filtered_prints = [
                 (print_name, print_info)
                 for print_name, print_info in self.prints.items()

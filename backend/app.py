@@ -5,9 +5,11 @@ from msal import ConfidentialClientApplication
 from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
+
 from queue_manager import queue_manager
 from printer_manager import printer_manager
 from dotenv import load_dotenv
+load_dotenv()
 from apscheduler.schedulers.background import BackgroundScheduler
 import time
 from pathlib import Path
@@ -21,7 +23,7 @@ from functools import wraps
 from printing_utils import extract_bambulab_estimated_time
 from auth import validate_and_decode_jwt
 
-load_dotenv()
+
 
  
 app = Flask(__name__, template_folder="../frontend/templates", static_folder="../frontend/static")
@@ -34,15 +36,19 @@ app.config['ALLOWED_EXTENSIONS'] = {'gcode', '3mf'}
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # Limit file size to 10 MB
 
 
+
+
 # MSAL Configuration
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 TENANT_ID = os.getenv("TENANT_ID")
 AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
 REDIRECT_PATH = os.getenv("REDIRECT_PATH")
-SCOPES = os.getenv("SCOPES")
+SCOPES = os.getenv("SCOPES").split(",")
 JWKS_URI = f"{AUTHORITY}/discovery/v2.0/keys"
 MICROSOFT_PUBLIC_KEYS = None
+
+print(SCOPES)
 
 
 msal_app = ConfidentialClientApplication(
@@ -155,7 +161,9 @@ def account():
 def login():
     """
     Redirect to Microsoft Entra ID login page.
-    """
+    # """
+    # print(SCOPES))
+    # print(type(list(SCOPES)))
     auth_url = msal_app.get_authorization_request_url(
         SCOPES,
         redirect_uri=url_for("auth_callback", _external=True),
@@ -346,6 +354,7 @@ if __name__ == "__main__":
  
 
     devices = p_man.get_devices()
+    print("here")
     
     # Decide what printers to connect to, for testing purposes only using one
     printers_to_connect = []

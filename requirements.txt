@@ -1,4 +1,7 @@
+APScheduler==3.11.0
+bambu-connect==0.3.1
 bambu-printer-manager==0.4.1
+bambulabs_api==2.5.1
 bidict==0.23.1
 blinker==1.9.0
 cachelib==0.13.0
@@ -46,6 +49,8 @@ pyyaml_env_tag==0.1
 requests==2.32.3
 simple-websocket==1.1.0
 six==1.17.0
+tzdata==2024.2
+tzlocal==5.2
 urllib3==2.3.0
 watchdog==6.0.0
 webcolors==24.11.1
