@@ -42,11 +42,6 @@ function update_printer_box_values(printer_name, percentage_complete, time_remai
     let time_container = document.getElementById(`time_label_${printer_name_proc}`) 
     let prog_bar_inner = document.getElementById(`progress_bar_inner_${printer_name_proc}`)
 
-    console.log("here")
-    console.log(percentage_complete)
-    console.log(time_remaining_minutes)
-    console.log(subtask_name)
-    console.log("here")
     if (!subtask_container || !percentage_container || !time_container || !prog_bar_inner) return
     subtask_container.innerText = `${subtask_name}`
     percentage_container.innerText = `${percentage_complete}%`
@@ -126,7 +121,6 @@ socket.on("connect", function(){
     //   ...
     // ]
     socket.on("prelim_queue", function(queue_data){
-        update_queue_time = Object.values(queue_data[-1])[0]["estimated_time_to_completion"]
         update_queue_time = Object.values(queue_data[-1])[0]["estimated_time_to_completion"]
         queue_time_el = document.getElementById("QueueTime")
         queue_time_el.innerText = `~${update_queue_time}min`

@@ -175,7 +175,7 @@ printer_files.json
 upload_test.py
 uploads/
 # frontend/
-backend/*
+# backend/*
 backend/BambuPrinter.log.*
 BambuPrinter.log.*
 devices.json
