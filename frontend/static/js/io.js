@@ -60,8 +60,11 @@ function update_printer_box_values(printer_name, percentage_complete, time_remai
 
 socket.on("connect", function(){
 
+
     // This should update info available on GUI about every printer
     // Example data:
+        // 
+        //{
         // 
         //{
         //   "S5. Brienne of Tarth": {
@@ -78,7 +81,7 @@ socket.on("connect", function(){
         // }
         socket.on("update_printer_times", function (printer_data) {
             print_area = document.getElementById("print-area")
-            console.log("update_printer_times", printer_data);
+
             if (print_area.children.length !== printer_data.length){
                 print_area.innerHTML = ""
                 for (printer_name in printer_data){
@@ -108,6 +111,7 @@ socket.on("connect", function(){
         console.log(file_data)
     })
 
+
     // This should update whatever is showing a prelimary queue
     // Example Data:
     // [
@@ -120,19 +124,15 @@ socket.on("connect", function(){
     //   ...
     // ]
     socket.on("prelim_queue", function(queue_data){
-        console.log("prelim_queue")
-        console.log(Object.values(queue_data))
-
-        
+        update_queue_time = Object.values(queue_data[-1])[0]["estimated_time_to_completion"]
         update_queue_time = Object.values(queue_data[-1])[0]["estimated_time_to_completion"]
         queue_time_el = document.getElementById("QueueTime")
         queue_time_el.innerText = `~${update_queue_time}min`
     })
     // This should create some sort of pop-up-like thing asking user to clean plate
+
     // Listen for the cleanup request from the server
     socket.on("request_plate_cleanup", function (cleanup_msg) {
-        console.log("request_plate_cleanup");
-        console.log(cleanup_msg);
 
         // Extract printId from the message
         const printId = cleanup_msg.printId || 'unknown';

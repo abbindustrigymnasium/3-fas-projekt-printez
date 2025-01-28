@@ -29,63 +29,7 @@ async function fetchCountdownData(printId, printerName, printName) {
         console.error('Error fetching countdown data:', error);
     }
 }
-//
-////function createPrintBox(printId, totalSeconds, remainingSeconds) {
-//    const container = document.createElement('div');
-//    container.classList.add('print-box');
-//    container.id = `print-${printId}`;
-//
-//    container.innerHTML = `
-//        <h3>Print #${printId}</h3>
-//        <div class="progress-container">
-//            <div class="progress-bar" id="progress-bar-${printId}"></div>
-//            <div class="time-label" id="time-label-${printId}"></div>
-//        </div>
-//        <button class="cancel-btn" id="cancel-btn-${printId}">Cancel</button>
-//    `;
-//
-//    document.getElementById('print-area').appendChild(container);
-//    startCountdown(printId, totalSeconds, remainingSeconds);
-//
-//    // Attach event listener to cancel button
-//    document.getElementById(`cancel-btn-${printId}`).addEventListener('click', () => {
-//        cancelCountdown(printId);
-//    });
-//}
-//
 
-function startCountdown(printId, totalSeconds, remainingSeconds) {
-    const progressBar = document.getElementById(`progress-bar-${printId}`);
-    const timeLabel = document.getElementById(`time-label-${printId}`);
-    const interval = setInterval(() => {
-        if (remainingSeconds <= 0) {
-            clearInterval(interval);
-            timeLabel.textContent = 'Completed!';
-            progressBar.style.width = '100%';
-            return;
-        }
-
-        timeLabel.textContent = formatTime(remainingSeconds);
-        progressBar.style.width = `${((totalSeconds - remainingSeconds) / totalSeconds) * 100}%`;
-    }, 1000);
-
-    // Store the interval ID for this print ID to allow cancellation
-    window[`interval-${printId}`] = interval;
-}
-
-
-function cancelCountdown(printId) {
-    // Stop the interval
-    clearInterval(window[`interval-${printId}`]);
-
-    // Remove the print box from the DOM
-    const printBox = document.getElementById(`print-${printId}`);
-    if (printBox) {
-        printBox.remove();
-    }
-
-    console.log(`Countdown for print #${printId} has been canceled.`);
-}
 
 // Function to send cancel action to Flask backend
 async function sendCancelAction(printId) {
@@ -122,11 +66,13 @@ function createTakeoutPrompt(printId, message = "Please take out your print!") {
 
     promptContainer.innerHTML = `
         <p>${message}</p>
+        <p>${message}</p>
         <button id="takeout-btn-${printId}">Jag har gjort rent platan</button>
     `;
 
     document.body.appendChild(promptContainer);
 
+    // Show the prompt (in case it's hidden by default)
     // Show the prompt (in case it's hidden by default)
     promptContainer.style.display = 'block';
 

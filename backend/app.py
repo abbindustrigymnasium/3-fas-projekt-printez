@@ -170,9 +170,8 @@ def account():
 def login():
     """
     Redirect to Microsoft Entra ID login page.
-    # """
-    # print(SCOPES))
-    # print(type(list(SCOPES)))
+    """
+
     auth_url = msal_app.get_authorization_request_url(
         SCOPES,
         redirect_uri=url_for("auth_callback", _external=True),
@@ -400,8 +399,3 @@ if __name__ == "__main__":
     socketio.run(app, debug=True, host="localhost")
     time.sleep(1)
     p_man.disconnect_printers()
-
-
-
-    ######
-    # Note to self, when gcode state is FAILED time remaining isnt reset to 0

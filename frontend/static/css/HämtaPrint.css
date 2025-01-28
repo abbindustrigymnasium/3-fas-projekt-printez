@@ -1,112 +1,156 @@
 body {
+  margin-top: 70px;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
   background-color: #1a1a1a;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+
+}
+#about-us-div{
+width: 80;
+margin-left: 10%;
+margin-top: 100px;
+}
+#Text-About-Us{
+color: rgb(167, 167, 167);
+
 }
 .PrintBox{
-  color: aliceblue;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px 0;
-  min-height: 50px;
+color: aliceblue;
+border: 1px solid #ccc;
+padding: 10px;
+margin: 10px 0;
+min-height: 50px;
 
 }
 
 .titleh3{
-  text-align: center;
-  margin-left: 4%;
-  color: white;
-  margin-top: 150px;
+text-align: center;
+margin-left: 4%;
+color: white;
+margin-top: 150px;
 }
 
 #scroll-container {
-  height: 100%;
-  overflow-y: auto;
-  scroll-behavior: smooth;
+height: 100%;
+overflow-y: auto;
+scroll-behavior: smooth;
 }
 
-  
 .takeout-prompt {
-    position: fixed;
-    top: 50%;
-    left: 52%;
-    transform: translate(-50%, -50%);
-    background: rgb(255, 255, 255);
-    z-index: 1000;
-    text-align: center;
-    color: #002d5e;
+  position: fixed;
+  top: 50%;
+  left: 52%;
+  transform: translate(-50%, -50%);
+  background: rgb(255, 255, 255);
+  z-index: 1000;
+  text-align: center;
+  color: #002d5e;
 }
 
 .takeout-prompt button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 .takeout-prompt button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
 /* Sidebar styles */
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: -10px; /* Sidebar always visible on the left */
-  width: 9% !important;
-  height: 100%;
-  background-color: #333;
-  color: white;
-  padding-top: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+position: fixed;
+top: 0;
+left: -10px; /* Sidebar always visible on the left */
+width: 9% !important;
+height: 100%;
+background-color: #333;
+color: white;
+padding-top: 20px;
+box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+list-style: none;
+padding: 0;
+margin: 0;
 }
 
 .sidebar ul li {
-  padding: 15px;
-  text-align: center;
-  border-bottom: 1px solid #444;
+padding: 15px;
+text-align: center;
+border-bottom: 1px solid #444;
 }
 
 .sidebar ul li:hover {
-  background-color: #575757;
-  cursor: pointer;
+background-color: #575757;
+cursor: pointer;
 }
 
 .sidebar ul li a {
-  color: white;
-  text-decoration: none;
-  display: block;
+color: white;
+text-decoration: none;
+display: block;
 }
 
 /* Content area styles */
 .content {
-  margin-left: 250px; /* Leave space for the sidebar */
-  padding: 20px;
+margin-left: 250px; /* Leave space for the sidebar */
+padding: 20px;
 }
 
 h1 {
-  color: #333;
+color: #333;
 }
 
 #sidebar-img{
-  width: 100%;
+width: 100%;
 }
 /* Responsive design: On small screens, the sidebar will still be visible */
 @media screen and (max-width: 768px) {
-  .sidebar {
-    left: 0; /* Sidebar is always visible */
-    width: 250px; /* Sidebar width is fixed */
-  }
-
-  .content {
-    margin-left: 250px; /* Content still leaves space for sidebar */
-  }
+.sidebar {
+  left: 0; /* Sidebar is always visible */
+  width: 250px; /* Sidebar width is fixed */
 }
 
+.content {
+  margin-left: 250px; /* Content still leaves space for sidebar */
+}
+}
+
+
+.modal {
+display: none; 
+position: fixed; 
+z-index: 1; 
+left: 0;
+top: 0;
+width: 100%; 
+height: 100%; 
+overflow: auto; 
+background-color: rgb(0,0,0); 
+background-color: rgba(0,0,0,0.4); 
+padding-top: 60px;
+}
+
+.modal-content {
+background-color: #fefefe;
+margin: 5% auto;
+padding: 20px;
+border: 1px solid #888;
+width: 300px;
+}
+
+button {
+margin: 5px;
+padding: 10px 20px;
+cursor: pointer;
+}

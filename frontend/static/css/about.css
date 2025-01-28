@@ -16,10 +16,6 @@
     margin-top: 20px;
 
 }
-#bottom{
-    background-color: black;
-    color: rgb(136, 136, 136);
-    width: 93%;
-    margin-left: 7%;
-    height: 200px;
-}
+#select-printing{
+    background-color: #6f6f6f;
+   }

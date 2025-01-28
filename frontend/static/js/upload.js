@@ -113,7 +113,7 @@ async function addToQueue() {
                 alert(`Error uploading file ${file.name}: ${result.error}`);
             }
         } catch (error) {
-            alert(`Failed to upload file ${file.name}: ${error.message}`);
+            console.log(`Failed to upload file ${file.name}: ${error.message}`);
         }
     }
 
