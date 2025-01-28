@@ -54,7 +54,6 @@ def validate_and_decode_jwt(token):
     try:
         # Decode without signature verification for debugging
         unverified_token = jwt_decode(token, options={"verify_signature": False})
-        print(f"Unverified token claims: {unverified_token}")
 
         # Fetch and match the JWKS keys
         get_public_keys()
@@ -77,7 +76,6 @@ def validate_and_decode_jwt(token):
             audience=CLIENT_ID,
             issuer=f"{AUTHORITY}/v2.0",
         )
-        print(f"Decoded token: {decoded_token}")
         return decoded_token
 
     except ExpiredSignatureError:

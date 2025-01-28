@@ -57,8 +57,6 @@ SCOPES = os.getenv("SCOPES").split(",")
 JWKS_URI = f"{AUTHORITY}/discovery/v2.0/keys"
 MICROSOFT_PUBLIC_KEYS = None
 
-print(SCOPES)
-
 
 msal_app = ConfidentialClientApplication(
     CLIENT_ID,
