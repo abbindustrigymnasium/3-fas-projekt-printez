@@ -75,6 +75,7 @@ q_man = queue_manager()
 def allowed_file(filename):
     """Check if a file has an allowed extension."""
     print(app.config)
+    print(app.config)
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 

@@ -55,6 +55,7 @@ async function sendCancelAction(printId) {
 
 // Function to create a takeout prompt box
 function createTakeoutPrompt(printId, message = "Please take out your print!") {
+function createTakeoutPrompt(printId, message = "Please take out your print!") {
     // Check if prompt already exists and don't create a new one
     if (document.getElementById(`prompt-${printId}`)) {
         return; // If it already exists, don't create a new one
@@ -88,6 +89,11 @@ function createTakeoutPrompt(printId, message = "Please take out your print!") {
         if (printBox) {
             printBox.remove();
         }
+        // Optionally, remove the corresponding print box if it exists
+        const printBox = document.getElementById(`print-${printId}`);
+        if (printBox) {
+            printBox.remove();
+        }
     });
 }
 
@@ -105,6 +111,8 @@ async function sendTakeoutAction(printId) {
         if (!response.ok) {
             const data = await response.json();
             console.error('Failed to notify takeout action:', data.error);
+        } else {
+            console.log(`Takeout confirmed for Print ID: ${printId}`);
         } else {
             console.log(`Takeout confirmed for Print ID: ${printId}`);
         }
