@@ -151,7 +151,7 @@ body {
 }
 /* Countdown timer styles */
 #top{
-margin-left: 51%;
+padding-inline: auto;
 color: white;
 }
 
@@ -161,7 +161,7 @@ color: white;
     text-align: center;
     margin-left: 10%;
     margin-top: 20px;
-    font-size: 19vw;
+    font-size: 10vw;
     height: 35px;
     color: white;
     font-weight: 350;
@@ -224,23 +224,25 @@ color: white;
 
 .print-box {
     margin-left: 14%;
-    height: 200px;
-    width: 80%;
-    background: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F39%2Fe9%2Fa9%2F39e9a957f793c8702656e4af84b2dc3f.jpg&f=1&nofb=1&ipt=cbea6028f806b667471a6cce34b28b1a76b0a5469d38ee5e1676629ef895bb79&ipo=images') repeat-x;
-    background-size: 200%;
-    animation: scroll-printing 120s linear infinite;
-    border: 1px solid white !important; /* Ensure border is not overridden */
+    height: 150px;
+    width: 70%;
+    /* background: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F39%2Fe9%2Fa9%2F39e9a957f793c8702656e4af84b2dc3f.jpg&f=1&nofb=1&ipt=cbea6028f806b667471a6cce34b28b1a76b0a5469d38ee5e1676629ef895bb79&ipo=images') repeat-x; */
+    /* background-size: 200%;
+    animation: scroll-printing 120s linear infinite; */
+    /* border: 1px solid white !important; Ensure border is not overridden */
+    background-color: #333333;
     font-size: 25px;
     font-weight: 400;
-    text-align: center;
+    /* text-align: center; */
     position: relative;
     overflow: hidden;
     color: white;
+    padding-inline: 5%;
 }
 
 
 
-.progress-container {
+/* .progress-container {
     margin-top: 100px;
     margin-left: 10px;
     color: white;
@@ -251,7 +253,7 @@ color: white;
     background: #7d7d7d;
     border-radius: 10px;
     overflow: hidden;
-}
+} */
 
 .progress-bar {
 
@@ -315,20 +317,27 @@ color: white;
 }
 
 .print-box h3 {
-    margin: 0 0 10px;
-    font-size: 18px;
-    color: #ffffff;
+    margin: 10px 0 10px;
+    font-size: 30px;
+    color: lightgray;
+    padding-inline: 0;
+}
+.print-box h5 {
+    font-size: 24px;
+    margin: 0;
+    color: lightgray;
 }
 
 .print-box p {
     margin: 5px 0;
-    font-size: 14px;
-    color: #a1a1a1;
+    font-size: 18px;
+    font-weight: bolder;
+    color: gray;
 }
 
 
 /* Time Label */
-.time-label {
+/* .time-label {
     position: absolute;
     top: 78%;
     left: 50%;
@@ -337,6 +346,58 @@ color: white;
     font-weight: bold;
     color: #ffffff;
     white-space: nowrap;
+} */
+.progress-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    width: 100%;
+    /* padding-inline: 5%; */
+    /* height: 30px;
+    border-radius: 3px;
+    background-color: #a1a1a1; */
+}
+
+.label_container{
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    width: 100%;
+    /* justify-content: space; */
+}
+
+.percentage_label{
+    padding-right: 20px;
+}
+
+.progress-bar-container{
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+}
+.progress-bar-outer{
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    position: absolute;
+}
+.progress-bar-inner-container{
+    width: 99%;
+    height: 100%;
+    position: absolute;
+    top: 15%;
+    padding-inline: 0.5%;
+
+}
+.progress-bar-inner{
+    height: 70%;
+    background-color: #ff4000;
+    border-radius: 10px;
+    z-index: 999;
+    /* padding-inline: 0.5%; */
 }
 
 /* Side window */

@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-    <link rel="stylesheet" href="./static/css/PrintEz.css">
-    <link rel="stylesheet" href="./static/css/about.css">
-    <link rel="stylesheet" href="./static/css/HämtaPrint.css">¨
+    <link rel="stylesheet" href="../static/css/PrintEz.css">
+    <link rel="stylesheet" href="../static/css/about.css">
+    <link rel="stylesheet" href="../static/css/HämtaPrint.css">¨
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/HämtaPrint.css') }}"> -->
 </head>
 <body   >
     <div class="takeout-prompt"></div>
-    <h1 id="top">Queue</h1>
-    <h1 id="QueueTime">1h 20min</h1>
+    <h1 id="top">Printing the entire queue will take</h1>
+    <h1 id="QueueTime">-</h1>
 
     <div class="hover-area"></div>
 
@@ -51,7 +52,7 @@
             <h2 id="infoDowbox3">3:  Här är dina prints som står i kö</h2>
         </div>
     </div> 
-    <h1 class="titleh3" id="TextDinPrint">Dina prints</h1>
+    <h1 class="titleh3" id="TextDinPrint">Printers:</h1>
     <div id="print-area"></div>
     <div id="printing-list"></div>
 

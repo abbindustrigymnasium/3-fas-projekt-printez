@@ -108,7 +108,7 @@ async function addToQueue() {
             const result = await response.json();
             if (response.ok) {
                 console.log(`File ${file.name} uploaded successfully.`);
-                queueFiles.push({ name: file.name });  // Add the new file to the queue
+                queueFiles.push({ uuid: result.uuid, name: result.filename });  // Add the new file to the queue
             } else {
                 alert(`Error uploading file ${file.name}: ${result.error}`);
             }
@@ -147,15 +147,15 @@ function updateQueueList() {
 // Remove file from the queue
 async function removeQueueFile(index) {
     const fileToRemove = queueFiles[index];
+    const print_id = fileToRemove.uuid 
 
     try {
-        const response = await fetch("/remove", {
+        const response = await fetch(`/cancel/${print_id}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ filename: fileToRemove.name }),
         });
 
-        const result = await response.json();
+        const result = await response;
         if (response.ok) {
             console.log(`File ${fileToRemove.name} removed successfully.`);
             queueFiles.splice(index, 1);

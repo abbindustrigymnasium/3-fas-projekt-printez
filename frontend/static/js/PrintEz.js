@@ -1,4 +1,7 @@
 
+// console.log("opening socket")
+// let socket = io()
+
 // Function to fetch countdown data from Flask backend
 async function fetchCountdownData(printId, printerName, printName) {
     try {
@@ -26,69 +29,62 @@ async function fetchCountdownData(printId, printerName, printName) {
         console.error('Error fetching countdown data:', error);
     }
 }
+//
+////function createPrintBox(printId, totalSeconds, remainingSeconds) {
+//    const container = document.createElement('div');
+//    container.classList.add('print-box');
+//    container.id = `print-${printId}`;
+//
+//    container.innerHTML = `
+//        <h3>Print #${printId}</h3>
+//        <div class="progress-container">
+//            <div class="progress-bar" id="progress-bar-${printId}"></div>
+//            <div class="time-label" id="time-label-${printId}"></div>
+//        </div>
+//        <button class="cancel-btn" id="cancel-btn-${printId}">Cancel</button>
+//    `;
+//
+//    document.getElementById('print-area').appendChild(container);
+//    startCountdown(printId, totalSeconds, remainingSeconds);
+//
+//    // Attach event listener to cancel button
+//    document.getElementById(`cancel-btn-${printId}`).addEventListener('click', () => {
+//        cancelCountdown(printId);
+//    });
+//}
+//
 
-// Function to dynamically create a new print box
-function createPrintBox(printId, totalSeconds, remainingSeconds) {
-    const container = document.createElement('div');
-    container.classList.add('print-box');
-    container.id = `print-${printId}`;
-
-    container.innerHTML = `
-        <h3>Print #${printId}</h3>
-        <p>Total Time: ${formatTime(totalSeconds)}</p>
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar-${printId}"></div>
-            <div class="time-label" id="time-label-${printId}"></div>
-        </div>
-        <button class="cancel-btn" id="cancel-btn-${printId}">Cancel</button>
-    `;
-
-    document.getElementById('print-area').appendChild(container);
-    startCountdown(printId, totalSeconds, remainingSeconds);
-
-    // Ensure the event listener is attached correctly
-    document.getElementById(`cancel-btn-${printId}`).addEventListener('click', () => {
-        cancelCountdown(printId);
-    });
-}
-
-// Function to start the countdown for a specific print
 function startCountdown(printId, totalSeconds, remainingSeconds) {
     const progressBar = document.getElementById(`progress-bar-${printId}`);
     const timeLabel = document.getElementById(`time-label-${printId}`);
-    const timerId = `timer-${printId}`;
-
-    window[timerId] = setInterval(() => {
-        if (remainingSeconds > 0) {
-            remainingSeconds--;
-            const progressPercentage = ((totalSeconds - remainingSeconds) / totalSeconds) * 100;
-            progressBar.style.width = `${progressPercentage}%`;
-            timeLabel.textContent = `Time Left: ${formatTime(remainingSeconds)}`;
-        } else {
-            clearInterval(window[timerId]);
-            timeLabel.textContent = 'Print Complete!';
-            createTakeoutPrompt(printId);
+    const interval = setInterval(() => {
+        if (remainingSeconds <= 0) {
+            clearInterval(interval);
+            timeLabel.textContent = 'Completed!';
+            progressBar.style.width = '100%';
+            return;
         }
+
+        timeLabel.textContent = formatTime(remainingSeconds);
+        progressBar.style.width = `${((totalSeconds - remainingSeconds) / totalSeconds) * 100}%`;
     }, 1000);
+
+    // Store the interval ID for this print ID to allow cancellation
+    window[`interval-${printId}`] = interval;
 }
 
-// Function to cancel countdown
+
 function cancelCountdown(printId) {
-    const timerId = `timer-${printId}`;
-    if (window[timerId]) {
-        clearInterval(window[timerId]);
-        console.log(`Print #${printId} countdown canceled`);
+    // Stop the interval
+    clearInterval(window[`interval-${printId}`]);
 
-        // Notify the backend of the cancellation
-        sendCancelAction(printId);
-
-        // Optionally, reset progress bar and timer display
-        document.getElementById(`progress-bar-${printId}`).style.width = '0%';
-        document.getElementById(`time-label-${printId}`).textContent = 'Canceled';
-
-        // Remove the print box or handle further actions
-        document.getElementById(`print-${printId}`).remove();
+    // Remove the print box from the DOM
+    const printBox = document.getElementById(`print-${printId}`);
+    if (printBox) {
+        printBox.remove();
     }
+
+    console.log(`Countdown for print #${printId} has been canceled.`);
 }
 
 // Function to send cancel action to Flask backend
@@ -113,9 +109,8 @@ async function sendCancelAction(printId) {
     }
 }
 
-
 // Function to create a takeout prompt box
-function createTakeoutPrompt(printId) {
+function createTakeoutPrompt(printId, message = "Please take out your print!") {
     // Check if prompt already exists and don't create a new one
     if (document.getElementById(`prompt-${printId}`)) {
         return; // If it already exists, don't create a new one
@@ -126,13 +121,13 @@ function createTakeoutPrompt(printId) {
     promptContainer.id = `prompt-${printId}`;
 
     promptContainer.innerHTML = `
-        <p>Print #${printId} is complete. Please take out your print!</p>
+        <p>${message}</p>
         <button id="takeout-btn-${printId}">Jag har gjort rent platan</button>
     `;
 
     document.body.appendChild(promptContainer);
 
-    // Show the prompt (was hidden by default)
+    // Show the prompt (in case it's hidden by default)
     promptContainer.style.display = 'block';
 
     // Add event listener for the takeout button
@@ -142,11 +137,13 @@ function createTakeoutPrompt(printId) {
         // Remove the prompt after action
         document.body.removeChild(promptContainer);
 
-        // Remove the countdown box as well (similar to canceling)
-        document.getElementById(`print-${printId}`).remove(); // Remove the print box
+        // Optionally, remove the corresponding print box if it exists
+        const printBox = document.getElementById(`print-${printId}`);
+        if (printBox) {
+            printBox.remove();
+        }
     });
 }
-
 
 // Function to send takeout action to Flask backend
 async function sendTakeoutAction(printId) {
@@ -162,24 +159,19 @@ async function sendTakeoutAction(printId) {
         if (!response.ok) {
             const data = await response.json();
             console.error('Failed to notify takeout action:', data.error);
+        } else {
+            console.log(`Takeout confirmed for Print ID: ${printId}`);
         }
     } catch (error) {
         console.error('Error sending takeout action:', error);
     }
 }
-    
-// Helper function to format time as HH:MM:SS
-function formatTime(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    let formattedTime = '';
-    if (hours > 0) formattedTime += `${hours}h `;
-    if (minutes > 0 || hours > 0) formattedTime += `${minutes}m `;
-    formattedTime += `${secs}s`;
-    return formattedTime.trim();
-}
 
-// Example Trigger
-fetchCountdownData('uniquePrintId134', 'Printer A', 'Test Print Job');
-fetchCountdownData('uniquePrintId144', 'Printer B', 'Test Print Job');
+// Loop through the printerState data and call fetchCountdownData
+for (const [key, value] of Object.entries(printerState)) {
+    const printId = key;
+    const printerName = key.split('-')[1]; // Extracting the printer name (e.g., Jerry Seinfeld)
+    const printName = value.subtask_name || "Unknown Print Job"; // Default to "Unknown Print Job" if subtask_name is empty
+
+    fetchCountdownData(printId, printerName, printName);
+}
