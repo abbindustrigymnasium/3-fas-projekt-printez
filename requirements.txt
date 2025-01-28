@@ -1,7 +1,4 @@
 APScheduler==3.11.0
-bambu-connect==0.3.1
-bambu-printer-manager==0.4.1
-bambulabs_api==2.5.1
 bidict==0.23.1
 blinker==1.9.0
 cachelib==0.13.0
