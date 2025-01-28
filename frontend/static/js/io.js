@@ -76,6 +76,8 @@ socket.on("connect", function(){
         //     "current_stage_text": "",
         //     "gcode_state": "FAILED",
         //     "percentage_complete": "13%"
+        //     "gcode_state": "FAILED",
+        //     "percentage_complete": "13%"
         //   }
         //   ...
         // }
