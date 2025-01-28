@@ -149,8 +149,9 @@
 }
 /* Countdown timer styles */
 #top{
-padding-inline: auto;
-color: white;
+    padding-left: 10%;
+    color: white;
+    text-align: center;
 }
 
 #QueueTime {

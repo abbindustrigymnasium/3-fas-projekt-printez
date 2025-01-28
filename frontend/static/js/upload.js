@@ -98,22 +98,17 @@ async function addToQueue() {
 
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("owner", "Gustav!!!");
-        formData.append("owner", "Gustav!!!");
+
 
         try {
-            console.log("1")
-            console.log("1")
             const response = await fetch("/upload", {
                 method: "POST",
                 body: formData,
             });
-            console.log("2")
-            console.log("2")
+
 
             const result = await response.json();
-            console.log("3")
-            console.log("3")
+
             if (response.ok) {
                 console.log(`File ${file.name} uploaded successfully.`);
                 queueFiles.push({ uuid: result.uuid, name: result.filename });  // Add the new file to the queue

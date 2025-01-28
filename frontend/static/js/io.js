@@ -121,6 +121,9 @@ socket.on("connect", function(){
     //   ...
     // ]
     socket.on("prelim_queue", function(queue_data){
+        if (queue_data !== undefined){
+            return
+        }
         update_queue_time = Object.values(queue_data[-1])[0]["estimated_time_to_completion"]
         queue_time_el = document.getElementById("QueueTime")
         queue_time_el.innerText = `~${update_queue_time}min`
@@ -131,10 +134,10 @@ socket.on("connect", function(){
     socket.on("request_plate_cleanup", function (cleanup_msg) {
 
         // Extract printId from the message
-        const printId = cleanup_msg.printId || 'unknown';
+        const printer_name = cleanup_msg.printer_name || 'unknown';
 
         // Call the function to create the cleanup prompt
-        createTakeoutPrompt(printId, cleanup_msg.message || "A cleanup is required!");
+        createTakeoutPrompt(printer_name.replace(/ /g, "_"), cleanup_msg.msg || "A cleanup is required!");
         // This should remove said pop-up
     })
     socket.on("plate_is_clean", function(data){
@@ -143,8 +146,10 @@ socket.on("connect", function(){
         printer_name = data["printer_name"]
         msg = data["msg"]
 
-        request_cleanup_el = document.getElementById(`promp-${printer_name}`)
-        request_cleanup_el.remove();
+        request_cleanup_el = document.getElementById(`prompt-${printer_name}`)
+        if (request_cleanup_el === undefined){
+            request_cleanup_el.remove();
+        }
         console.log(msg)
     })
 });

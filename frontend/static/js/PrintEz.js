@@ -55,7 +55,6 @@ async function sendCancelAction(printId) {
 
 // Function to create a takeout prompt box
 function createTakeoutPrompt(printId, message = "Please take out your print!") {
-function createTakeoutPrompt(printId, message = "Please take out your print!") {
     // Check if prompt already exists and don't create a new one
     if (document.getElementById(`prompt-${printId}`)) {
         return; // If it already exists, don't create a new one
@@ -67,13 +66,10 @@ function createTakeoutPrompt(printId, message = "Please take out your print!") {
 
     promptContainer.innerHTML = `
         <p>${message}</p>
-        <p>${message}</p>
-        <button id="takeout-btn-${printId}">Jag har gjort rent platan</button>
-    `;
+        <button id="takeout-btn-${printId}">Jag har gjort rent platan</button>`;
 
     document.body.appendChild(promptContainer);
 
-    // Show the prompt (in case it's hidden by default)
     // Show the prompt (in case it's hidden by default)
     promptContainer.style.display = 'block';
 
@@ -89,18 +85,13 @@ function createTakeoutPrompt(printId, message = "Please take out your print!") {
         if (printBox) {
             printBox.remove();
         }
-        // Optionally, remove the corresponding print box if it exists
-        const printBox = document.getElementById(`print-${printId}`);
-        if (printBox) {
-            printBox.remove();
-        }
     });
 }
 
 // Function to send takeout action to Flask backend
 async function sendTakeoutAction(printId) {
     try {
-        const response = await fetch('/takeout', {
+        const response = await fetch(`/plate_is_clean/${printId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -113,19 +104,19 @@ async function sendTakeoutAction(printId) {
             console.error('Failed to notify takeout action:', data.error);
         } else {
             console.log(`Takeout confirmed for Print ID: ${printId}`);
-        } else {
-            console.log(`Takeout confirmed for Print ID: ${printId}`);
+
         }
     } catch (error) {
         console.error('Error sending takeout action:', error);
     }
 }
 
-// Loop through the printerState data and call fetchCountdownData
-for (const [key, value] of Object.entries(printerState)) {
-    const printId = key;
-    const printerName = key.split('-')[1]; // Extracting the printer name (e.g., Jerry Seinfeld)
-    const printName = value.subtask_name || "Unknown Print Job"; // Default to "Unknown Print Job" if subtask_name is empty
 
-    fetchCountdownData(printId, printerName, printName);
-}
+// // Loop through the printerState data and call fetchCountdownData
+// for (const [key, value] of Object.entries(printerState)) {
+//     const printId = key;
+//     const printerName = key.split('-')[1]; // Extracting the printer name (e.g., Jerry Seinfeld)
+//     const printName = value.subtask_name || "Unknown Print Job"; // Default to "Unknown Print Job" if subtask_name is empty
+
+//     fetchCountdownData(printId, printerName, printName);
+// }

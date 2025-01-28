@@ -62,15 +62,16 @@ class printer_manager():
                             "nozzle_diameter": {DIAMETER: float},
                             "dev_structure": {STRUCTURE: str}
                         },
-                        ...]
+                        ...
+                    ]
 
         Exceptions:
             - Unable to get devices
-                request to the endpoint resulted in res.ok being false, wont return anything
+                request to the endpoint resulted in res.ok being false, won't return anything
         """
 
         endpoint = "/v1/iot-service/api/user/bind"
-        # User agent needs to be specified to something, ohterwise bambulabs blocks it for some reason?!??!?!
+        # User agent needs to be specified to something, otherwise bambulabs blocks it for some reason?!??!?!
         headers = {"Authorization": f"Bearer {self.access_token}",
                    "User-Agent": "curl/7.68.0"}
         res = requests.get(f"{self.cloud_host}{endpoint}", headers=headers)

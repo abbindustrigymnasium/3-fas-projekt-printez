@@ -84,6 +84,7 @@ def allowed_file(filename):
 
 @scheduler.scheduled_job('interval', seconds=10, kwargs={"p_man": p_man, "q_man": q_man})
 def emit_new_printer_times(p_man, q_man):
+    print("herhehrehrheh", q_man.prints)
     updated_task_infos = p_man.get_tasks_info()
 
     for printer_name, printer_info in updated_task_infos.items():
@@ -92,17 +93,20 @@ def emit_new_printer_times(p_man, q_man):
                                       or printer_info["gcode_state"] == "IDLE")
         
         printer_plate_is_clean = p_man.printers[printer_name]._plate_clean
+        print("Printing?", printer_not_printing)
+        print("Clean?", printer_plate_is_clean)
         if printer_not_printing and not printer_plate_is_clean:
             
             socketio.emit("request_plate_cleanup", {"msg": f"{printer_name} has status: {printer_info["gcode_state"]}. Please clean plate!", "printer_name": printer_name})
 
 
         elif printer_not_printing and printer_plate_is_clean:
+            print("skibiibi")
             next_print = q_man.get_next_print()
 
 
             p_man.printers[printer_name]._currently_printing = {"print_id": None, "owner": None, "filename": None}
-
+            print(next_print)
             if next_print:
                 new_file_path = f'/cache/{q_man.prints[next_print]["file_path"].split("\\")[-1]}'
                 
@@ -123,7 +127,7 @@ def emit_new_printer_times(p_man, q_man):
                 if print_not_in_q:
                     print(f"Print, {next_print}, has been removed from queue.")
 
-                p_man.printers[printer_name].plate_clean = False
+                p_man.printers[printer_name]._plate_clean = False
 
 
     socketio.emit("update_printer_times", updated_task_infos)
@@ -269,6 +273,7 @@ def upload_file():
             file_uuid, _ = q_man.add_new_print(owner, filepath, estimated_time, file_uuid)
             file_data = {"filename": filename, "owner": owner}
 
+            print("Prints in queue", q_man.prints)
             socketio.emit("file_added_to_queue", file_data)
             return jsonify({"status": "File uploaded successfully", "filename": file.filename, "uuid": file_uuid}), 200
 
@@ -334,6 +339,8 @@ def cancel_print(print_id):
 
         # Let the scheduled function handle starting prints
         p_man.printers[printer_name]._plate_clean = plate_clean
+
+        return "No print with that id", 400
         
 
 
@@ -386,7 +393,7 @@ if __name__ == "__main__":
     # Decide what printers to connect to, for testing purposes only using one
     printers_to_connect = []
     for device in devices:
-        if device["name"][:2] == "S4":
+        if device["name"][:2] == "S5":
             printers_to_connect.append(device)
 
     p_man.connect_printers(printers_to_connect)
