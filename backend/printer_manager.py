@@ -291,7 +291,7 @@ class printer_manager():
         plates_clean = {}
         for printer_name in printer_names:
             printer_gcode_state = self.printers[printer_name].gcode_state
-            plates_clean[printer_name] = True if printer_gcode_state == "IDLE" or printer_gcode_state == "PREPARING" else False
+            plates_clean[printer_name] = printer_gcode_state == "IDLE" or printer_gcode_state == "PREPARING"
             self.printers[printer_name].stop_printing()
 
         return plates_clean
@@ -348,7 +348,7 @@ if __name__ == "__main__":
 
 
     devices = p_man.get_devices()
-    # print(devices)
+    
     printers_to_connect_to = []
     # Chooses a single printer
     for printer in devices:

@@ -37,6 +37,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
+backend/
 htmlcov/
 .tox/
 .nox/
@@ -125,8 +126,10 @@ celerybeat.pid
 .env
 .venv
 .venv1
+.venv1
 env/
 venv/
+environment/
 ENV/
 env.bak/
 venv.bak/
@@ -172,7 +175,7 @@ access_code
 printer_files.json
 upload_test.py
 uploads/
-frontend/
+
 backend/BambuPrinter.log.*
 BambuPrinter.log.*
 devices.json

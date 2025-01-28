@@ -1,0 +1,402 @@
+/* Upload window*/
+
+.animation-container {
+    text-align: center;
+}
+#bottom{
+    background-color: black;
+    color: rgb(136, 136, 136);
+    width: 93%;
+    margin-left: 7%;
+    height: 200px;
+}
+/* Apply the animation to the element */
+#infoDowbox {
+    position: absolute;
+    margin-top: 430px;
+    color: rgb(89, 89, 89);
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    max-width: 12%;
+    margin-left: 11.5% !important;
+    transform: translateX(-50%);
+    text-align: center;
+}
+#infoDowbox3 {
+    position: absolute;
+    margin-top: 440px;
+    color: rgb(89, 89, 89);
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    max-width: 12%;
+    margin-left: 12.5% !important;
+    transform: translateX(-50%);
+    text-align: center;
+}
+#infoDowbox2{
+    position: absolute;
+    margin-top: 430px;
+    color: rgb(89, 89, 89);
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    max-width: 12%;
+    margin-left: 11% !important;
+    transform: translateX(-50%);
+    text-align: center;
+}
+#select-printing{
+ background-color: #6f6f6f;
+}
+
+.container {
+    display: flex; /* Flexbox container for side-by-side alignment */
+    width: 94%; /* Adjust as needed for layout */
+    justify-content: center;
+    padding-top: 150px;
+}
+.Dowbox {
+    margin-left: 15%;
+    flex: 1; /* Allow the box to take up equal width */
+    max-width: 30%; /* Limit the maximum width */
+    height: 300px;
+    background-color: #3b3b3b;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    border: 4px dashed hsl(0, 0%, 46%); 
+    text-align: center; 
+    font-size: 16px;    
+    color: gray;
+}
+.file-box {
+    display: flex; 
+    align-items: center;
+    justify-content: start; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    border: 2px solid #ff5500; 
+    background-color: rgb(84, 77, 77);
+    padding: 5px;
+    width: 85%; 
+    height: 60px;
+    border-radius: 5px;
+    position: relative; /* Allows elements to follow normal flow */
+    margin-top: 10px; /* Add spacing between stacked elements */
+    margin-left: 10px;
+}
+.file-icon {
+    margin-right: 10px; /* Add space between the icon and file name */
+    margin-left: 20px;
+    font-size: 40px;
+}
+.file-name {
+    flex-grow: 1; /* Allow the file name to expand, pushing the button to the right */
+    text-overflow: ellipsis; /* Truncate long file names with "..." */
+    overflow: hidden; /* Hide overflow if text is too long */
+}
+.Qfile-name {
+    flex-grow: 1; /* Allow the file name to expand, pushing the button to the right */
+    text-overflow: ellipsis; /* Truncate long file names with "..." */
+    overflow: hidden; /* Hide overflow if text is too long */
+}
+.LDowbox {
+    flex: 1; /* Allow the box to take up equal width */
+    max-width: 30%; /* Limit the maximum width */
+    margin-left: 5%;
+    height: 300px;
+    background-color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#queueList{
+    position: absolute;
+    margin-top: 120px;
+    width: 20%;
+    height: 200px;
+    background-color: #333333;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+}
+#In-Queue{
+    position: absolute;
+    margin-top: -215px;
+    border: none;
+    font-size: 20px;
+    font-weight: 400;
+    color: white;
+}
+#browseButton {
+    margin-top: 20px; /* Add spacing below the text or drop zone */
+    padding: 10px 20px; /* Add padding for a nicer button look */
+    font-size: 16px; /* Font size for the button text */
+    cursor: pointer; /* Pointer cursor on hover */
+    border: none;
+    background-color: #e64b18; /* Green button background */
+    color: white; /* White text */
+    border-radius: 5px; /* Rounded corners */
+}
+#browseButton:hover {
+    background-color: #ff7c01; /* Darker green on hover */
+}
+#fileInput {
+    display: none;
+}
+/* Countdown timer styles */
+#top{
+    padding-left: 10%;
+    color: white;
+    text-align: center;
+}
+
+#QueueTime {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-left: 10%;
+    margin-top: 20px;
+    font-size: 10vw;
+    height: 35px;
+    color: white;
+    font-weight: 350;
+}
+
+.timer-container {
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 300px;
+    justify-content: center;
+    align-items: center;
+}
+
+#Uploaded-files{
+    position: absolute;
+    margin-top: -200px;
+    border: none;
+    font-size: 20px;
+    font-weight: 400;
+    color: white;
+}
+.queue-box{
+    display: flex; 
+    align-items: center;
+    justify-content: start; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    border: 2px solid #ff5500; 
+    background-color: rgb(84, 77, 77);
+    padding: 5px;
+    width: 85%; 
+    height: 60px;
+    border-radius: 5px;
+    position: relative; /* Allows elements to follow normal flow */
+    margin-top: 10px; /* Add spacing between stacked elements */
+    margin-left: 10px;
+}
+#addToQueueButton {
+    position: absolute;
+    margin-top: 150px;
+    padding: 10px 3%;
+    background-color: #ff4000;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+}
+#fileList, #queueList {
+    margin-bottom: 20px;
+}
+#print-area {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 30px;
+}
+
+.print-box {
+    margin-left: 14%;
+    height: 150px;
+    width: 70%;
+    /* background: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F39%2Fe9%2Fa9%2F39e9a957f793c8702656e4af84b2dc3f.jpg&f=1&nofb=1&ipt=cbea6028f806b667471a6cce34b28b1a76b0a5469d38ee5e1676629ef895bb79&ipo=images') repeat-x; */
+    /* background-size: 200%;
+    animation: scroll-printing 120s linear infinite; */
+    /* border: 1px solid white !important; Ensure border is not overridden */
+    background-color: #333333;
+    font-size: 25px;
+    font-weight: 400;
+    /* text-align: center; */
+    position: relative;
+    overflow: hidden;
+    color: white;
+    padding-inline: 5%;
+}
+
+
+
+/* .progress-container {
+    margin-top: 100px;
+    margin-left: 10px;
+    color: white;
+    width: 100%;
+    left: 10px;
+    width: calc(100% - 20px);
+    height: 20px;
+    background: #7d7d7d;
+    border-radius: 10px;
+    overflow: hidden;
+} */
+
+.progress-bar {
+
+    height: 100%;
+    background: limegreen;
+    width: 0%;
+    transition: width 1s linear;
+}
+
+
+.cancel-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: white;
+}
+
+#TextDinPrint{
+    margin-left: 8%;
+}
+.takeout-prompt {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Optional: for better visual */
+    display: none; /* Hide by default */
+}
+
+/* Optionally, you can style the button inside the prompt */
+.takeout-prompt button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.takeout-prompt button:hover {
+    background-color: #218838;
+}
+
+@keyframes scroll-printing {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
+}
+
+.print-box h3 {
+    margin: 10px 0 10px;
+    font-size: 30px;
+    color: lightgray;
+    padding-inline: 0;
+}
+.print-box h5 {
+    font-size: 24px;
+    margin: 0;
+    color: lightgray;
+}
+
+.print-box p {
+    margin: 5px 0;
+    font-size: 18px;
+    font-weight: bolder;
+    color: gray;
+}
+
+
+/* Time Label */
+/* .time-label {
+    position: absolute;
+    top: 78%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    font-weight: bold;
+    color: #ffffff;
+    white-space: nowrap;
+} */
+.progress-container{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    width: 100%;
+    /* padding-inline: 5%; */
+    /* height: 30px;
+    border-radius: 3px;
+    background-color: #a1a1a1; */
+}
+
+.label_container{
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    width: 100%;
+    /* justify-content: space; */
+}
+
+.percentage_label{
+    padding-right: 20px;
+}
+
+.progress-bar-container{
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+}
+.progress-bar-outer{
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    position: absolute;
+}
+.progress-bar-inner-container{
+    width: 99%;
+    height: 100%;
+    position: absolute;
+    top: 15%;
+    padding-inline: 0.5%;
+
+}
+.progress-bar-inner{
+    height: 70%;
+    background-color: #ff4000;
+    border-radius: 10px;
+    z-index: 999;
+    /* padding-inline: 0.5%; */
+}
+
+/* Side window */

@@ -123,7 +123,7 @@ def emit_new_printer_times(p_man, q_man):
                 if print_not_in_q:
                     print(f"Print, {next_print}, has been removed from queue.")
 
-                p_man.printers[printer_name].plate_clean = False
+                p_man.printers[printer_name]._plate_clean = False
 
 
     socketio.emit("update_printer_times", updated_task_infos)
@@ -170,9 +170,8 @@ def account():
 def login():
     """
     Redirect to Microsoft Entra ID login page.
-    # """
-    # print(SCOPES))
-    # print(type(list(SCOPES)))
+    """
+    
     auth_url = msal_app.get_authorization_request_url(
         SCOPES,
         redirect_uri=url_for("auth_callback", _external=True),
@@ -230,7 +229,7 @@ def upload_file():
 
     try:
         decoded_id_token = validate_and_decode_jwt(id_token)
-        owner = decoded_id_token.get("email")# or decoded_id_token.get("preferred_username") or decoded_id_token.get("sub")
+        owner = decoded_id_token.get("email")
 
         if not owner:
             return jsonify({"error": "Unable to determine file owner from ID token"}), 400
@@ -331,10 +330,15 @@ def cancel_print(print_id):
             return "print not found"
         
         # Stop print
+        if currently_printing["owner"] != owner_email:
+            return "Print doesnt belong to user", 401
+        
         plate_clean = p_man.stop_print_on_printers([printer_name])[printer_name]
 
         # Let the scheduled function handle starting prints
         p_man.printers[printer_name]._plate_clean = plate_clean
+
+        return "Print had started printing, but has now been stopped", 200
         
 
 
@@ -382,7 +386,6 @@ if __name__ == "__main__":
  
 
     devices = p_man.get_devices()
-    print("here")
     
     # Decide what printers to connect to, for testing purposes only using one
     printers_to_connect = []
@@ -400,8 +403,3 @@ if __name__ == "__main__":
     socketio.run(app, debug=True, host="localhost")
     time.sleep(1)
     p_man.disconnect_printers()
-
-
-
-    ######
-    # Note to self, when gcode state is FAILED time remaining isnt reset to 0

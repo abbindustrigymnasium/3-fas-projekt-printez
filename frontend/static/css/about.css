@@ -1,0 +1,21 @@
+#titleh1{
+    align-items: center;
+    text-align: center;
+    color: white;
+    size: 300px;
+    margin-top: 300px;
+}
+.info{
+    text-align: left;
+    color: white;
+    margin-top: 20px;
+}
+.info2{
+    text-align: right;
+    color: white;
+    margin-top: 20px;
+
+}
+#select-printing{
+    background-color: #6f6f6f;
+   }

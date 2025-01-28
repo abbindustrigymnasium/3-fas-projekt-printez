@@ -59,7 +59,6 @@ class queue_manager():
             "time_diff": estim_time
         }
 
-        print(self.prints)
 
 
         successful = True if self.prints[str(print_id)] else False
@@ -167,7 +166,11 @@ class queue_manager():
                 time_waited_since_swap = next_print_to_finish[1]
                 time_waited_total += next_print_to_finish[1]
 
-                prelim_queue.append({str(next_uuid):{"estimated_time_to_completion": (next_values["estimated_time_to_print"] + time_waited_total)//60, "file_name": next_values["file_path"]}})
+                filename = next_values["file_path"].split("\\")[-1]
+
+                prelim_queue.append({str(next_uuid):{"estimated_time_to_completion": (next_values["estimated_time_to_print"] + time_waited_total)//60,
+                                                     "filename": filename,
+                                                     "owner": next_values["owner"]}})
 
                 sorted_queue[next_uuid] = float("inf")
                 _printers[next_print_to_finish[0]] = next_values["estimated_time_to_print"]
